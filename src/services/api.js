@@ -91,7 +91,7 @@ export const ApiService = (() => {
         // Código 209 = Invalid session token (token expirado)
         if (err.response?.status === 209) {
           SessionService.clear()
-          window.location.href = '/src/pages/login.html'
+          window.location.href = '/delicatte-confeitaria-app/src/pages/login.html'
         }
         return Promise.reject(err)
       }
@@ -208,7 +208,7 @@ export const AuthService = {
   // Guards de rota
   requireAuth() {
     if (!SessionService.isLoggedIn()) {
-      window.location.href = '/src/pages/login.html'
+      window.location.href = '/delicatte-confeitaria-app/src/pages/login.html'
     }
   },
 

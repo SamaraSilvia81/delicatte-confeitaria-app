@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin · Delicatte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/src/styles/admin.css">
+  <link rel="stylesheet" href="/delicatte-confeitaria-app/src/styles/admin.css">
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 </head>
 <body>
@@ -47,7 +47,7 @@
 
     <div class="sb-section">
       <div class="sb-section-title">Sistema</div>
-      <a href="/" class="nav-link">
+      <a href="/delicatte-confeitaria-app/" class="nav-link">
         <i class="ph ph-storefront"></i>
         <span>Ver loja</span>
       </a>
@@ -375,7 +375,7 @@
 
   document.getElementById('logout-btn').addEventListener('click', async () => {
     try { await AuthService.logout() } catch {}
-    window.location.href = '/src/pages/login.html'
+    window.location.href = '/delicatte-confeitaria-app/src/pages/login.html'
   })
 
   // ══════════════════════════════════════════

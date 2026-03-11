@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Entrar · Delicatte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/src/styles/login.css">
+  <link rel="stylesheet" href="/delicatte-confeitaria-app/src/styles/login.css">
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 </head>
 <body>
@@ -34,7 +34,7 @@
 <div class="panel">
   <div class="panel-inner">
 
-    <a href="/" class="back-link">
+    <a href="/delicatte-confeitaria-app/" class="back-link">
       <i class="ph ph-arrow-left"></i> Voltar à loja
     </a>
 
@@ -257,7 +257,7 @@
       await AuthService.register({ name: nameI.value, email: emailI.value, password: passI.value })
       Toast.success('Conta criada! Fazendo login...')
       await AuthService.login(emailI.value, passI.value)
-      setTimeout(() => window.location.href = '/src/pages/profile.html', 1000)
+      setTimeout(() => window.location.href = '/delicatte-confeitaria-app/src/pages/profile.html', 1000)
     } catch (err) {
       Toast.error(err.response?.data?.error || 'Erro ao criar conta.')
       setLoading(btn, false)

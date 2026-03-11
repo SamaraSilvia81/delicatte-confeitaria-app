@@ -6,7 +6,7 @@
   <meta name="description" content="Delicatte Confeitaria — Doces artesanais feitos com amor">
   <title>Delicatte Confeitaria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/src/styles/index.css">
+  <link rel="stylesheet" href="/delicatte-confeitaria-app/src/styles/index.css">
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 </head>
 <body>
@@ -50,7 +50,7 @@
         <i class="ph ph-shopping-bag" style="font-size:1.2rem;"></i>
         <span id="cart-badge">0</span>
       </button>
-      <a href="/src/pages/login.html" class="btn btn-primary" id="nav-auth-btn">
+      <a href="/delicatte-confeitaria-app/src/pages/login.html" class="btn btn-primary" id="nav-auth-btn">
         <i class="ph ph-user"></i>
         Entrar
       </a>
@@ -627,14 +627,14 @@
   if (session?.token) {
     if (session.role === 'admin') {
       btn.innerHTML = `<i class="ph ph-gauge"></i> Painel Admin`
-      btn.href = '/src/admin/index.html'
+      btn.href = '/delicatte-confeitaria-app/src/admin/index.html'
     } else {
       btn.innerHTML = `<i class="ph ph-user-circle"></i> ${session.name || 'Conta'}`
-      btn.href = '/src/pages/profile.html'
+      btn.href = '/delicatte-confeitaria-app/src/pages/profile.html'
     }
   } else {
     btn.innerHTML = `<i class="ph ph-user"></i> Entrar`
-    btn.href = '/src/pages/login.html'
+    btn.href = '/delicatte-confeitaria-app/src/pages/login.html'
   }
 
   CartService.subscribe(({ items, count, total }) => {
