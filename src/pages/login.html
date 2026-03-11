@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar · Delicatte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="/src/styles/login.css">
+  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+</head>
+<body>
+
+<div class="lights" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════════
+     PAINEL VISUAL (esquerdo)
+══════════════════════════════════════════ -->
+<div class="visual" aria-hidden="true">
+  <img class="visual__bg-img" src="/src/assets/img/hero.jpg" alt="" draggable="false">
+  <div class="visual__pattern"></div>
+  <div class="visual__content">
+    <div class="visual__logo">Deli<em>catte</em></div>
+    <div class="visual__sub">Confeitaria Artesanal</div>
+    <blockquote class="visual__quote">
+      "Um doce no momento certo<br>
+      é um abraço que o paladar sente."
+    </blockquote>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAINEL FORMULÁRIO (direito)
+══════════════════════════════════════════ -->
+<div class="panel">
+  <div class="panel-inner">
+
+    <a href="/" class="back-link">
+      <i class="ph ph-arrow-left"></i> Voltar à loja
+    </a>
+
+    <button class="btn btn-ghost theme-btn-abs" id="theme-toggle" aria-label="Alternar tema">
+      <i class="ph ph-moon" data-theme-icon></i>
+    </button>
+
+    <h2 class="panel-title">Bem-vinda de volta</h2>
+    <p class="panel-subtitle">Entre na sua conta ou crie uma nova.</p>
+
+    <!-- Tabs login / cadastro -->
+    <div class="tabs">
+      <button class="tab active" data-tab="login">Entrar</button>
+      <button class="tab" data-tab="register">Criar conta</button>
+    </div>
+
+    <!-- ── Formulário de Login ── -->
+    <form class="form-wrap" id="login-form" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="login-email">E-mail</label>
+        <div class="input-with-icon">
+          <i class="ph ph-envelope-simple icon"></i>
+          <input type="email" id="login-email" class="form-input"
+                 placeholder="seu@email.com" autocomplete="email">
+        </div>
+        <span class="form-error" id="login-email-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="login-password">
+          Senha
+          <a href="#" class="forgot-link">Esqueci a senha</a>
+        </label>
+        <div class="input-with-icon">
+          <i class="ph ph-lock-simple icon"></i>
+          <input type="password" id="login-password" class="form-input"
+                 placeholder="••••••••" autocomplete="current-password">
+          <button type="button" class="eye-btn" data-target="login-password">
+            <i class="ph ph-eye"></i>
+          </button>
+        </div>
+        <span class="form-error" id="login-password-error"></span>
+      </div>
+
+      <div class="error-box" id="login-err" hidden>
+        <i class="ph ph-warning-circle"></i>
+        <span id="login-err-text"></span>
+      </div>
+
+      <button type="submit" class="btn btn-primary submit-btn" id="login-btn">
+        <i class="ph ph-sign-in"></i> Entrar na conta
+      </button>
+
+    </form>
+
+    <!-- ── Formulário de Cadastro ── -->
+    <form class="form-wrap" id="register-form" novalidate style="display:none;">
+
+      <div class="form-group">
+        <label class="form-label" for="reg-name">Nome completo</label>
+        <div class="input-with-icon">
+          <i class="ph ph-user icon"></i>
+          <input type="text" id="reg-name" class="form-input" placeholder="Seu nome">
+        </div>
+        <span class="form-error" id="reg-name-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-email">E-mail</label>
+        <div class="input-with-icon">
+          <i class="ph ph-envelope-simple icon"></i>
+          <input type="email" id="reg-email" class="form-input" placeholder="seu@email.com">
+        </div>
+        <span class="form-error" id="reg-email-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-pw">Senha</label>
+        <div class="input-with-icon">
+          <i class="ph ph-lock-simple icon"></i>
+          <input type="password" id="reg-pw" class="form-input" placeholder="Mínimo 6 caracteres">
+          <button type="button" class="eye-btn" data-target="reg-pw">
+            <i class="ph ph-eye"></i>
+          </button>
+        </div>
+        <span class="form-error" id="reg-pw-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="reg-confirm">Confirmar senha</label>
+        <div class="input-with-icon">
+          <i class="ph ph-lock-simple-open icon"></i>
+          <input type="password" id="reg-confirm" class="form-input" placeholder="Repita a senha">
+        </div>
+        <span class="form-error" id="reg-confirm-error"></span>
+      </div>
+
+      <button type="submit" class="btn btn-primary submit-btn" id="register-btn">
+        <i class="ph ph-user-plus"></i> Criar minha conta
+      </button>
+
+    </form>
+
+    <p class="legal-note">
+      Ao entrar você concorda com nossa
+      <a href="#">Política de privacidade</a>.
+    </p>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script type="module">
+  import { ThemeManager, Toast, Validators, validateField, validateForm, setLoading } from '/src/utils/ui.js'
+  import { AuthService, SessionService } from '/src/services/api.js'
+
+  ThemeManager.init()
+  ThemeManager.bind('#theme-toggle')
+
+  // Redireciona se já logado
+  if (SessionService.isLoggedIn()) {
+    const s = SessionService.get()
+    window.location.href = s.role === 'admin' ? '/src/admin/index.html' : '/src/pages/profile.html'
+  }
+
+  // ── Tabs ───────────────────────────────────
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const t = tab.dataset.tab
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'))
+      tab.classList.add('active')
+      document.getElementById('login-form').style.display    = t === 'login'    ? 'flex' : 'none'
+      document.getElementById('register-form').style.display = t === 'register' ? 'flex' : 'none'
+    })
+  })
+
+  // ── Toggle mostrar/ocultar senha ───────────
+  document.querySelectorAll('.eye-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target)
+      const icon  = btn.querySelector('i')
+      const hide  = input.type === 'password'
+      input.type     = hide ? 'text' : 'password'
+      icon.className = hide ? 'ph ph-eye-slash' : 'ph ph-eye'
+    })
+  })
+
+  // ── Validação no blur (Strategy Pattern) ───
+  const BLUR_RULES = [
+    ['login-email',    [Validators.required, Validators.email]],
+    ['login-password', [Validators.required, Validators.password]],
+    ['reg-name',       [Validators.required, Validators.minLength(2)]],
+    ['reg-email',      [Validators.required, Validators.email]],
+    ['reg-pw',         [Validators.required, Validators.password]],
+  ]
+  BLUR_RULES.forEach(([id, validators]) => {
+    document.getElementById(id)
+      ?.addEventListener('blur', function () { validateField(this, ...validators) })
+  })
+
+  // ── Login ──────────────────────────────────
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const emailI = document.getElementById('login-email')
+    const passI  = document.getElementById('login-password')
+    const errBox = document.getElementById('login-err')
+    errBox.hidden = true
+
+    if (!validateForm([
+      { input: emailI, validators: [Validators.required, Validators.email] },
+      { input: passI,  validators: [Validators.required, Validators.password] },
+    ])) return
+
+    const btn = document.getElementById('login-btn')
+    setLoading(btn, true)
+    try {
+      const user = await AuthService.login(emailI.value, passI.value)
+      Toast.success(`Bem-vinda, ${user.name || user.username}!`)
+      setTimeout(() => {
+        window.location.href = user.role === 'admin' ? '/src/admin/index.html' : '/src/pages/profile.html'
+      }, 800)
+    } catch (err) {
+      const msg = err.response?.data?.error || 'E-mail ou senha incorretos.'
+      document.getElementById('login-err-text').textContent = msg
+      errBox.hidden = false
+      setLoading(btn, false)
+    }
+  })
+
+  // ── Cadastro ───────────────────────────────
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const nameI    = document.getElementById('reg-name')
+    const emailI   = document.getElementById('reg-email')
+    const passI    = document.getElementById('reg-pw')
+    const confirmI = document.getElementById('reg-confirm')
+    const errEl    = document.getElementById('reg-confirm-error')
+
+    let valid = validateForm([
+      { input: nameI,  validators: [Validators.required, Validators.minLength(2)] },
+      { input: emailI, validators: [Validators.required, Validators.email] },
+      { input: passI,  validators: [Validators.required, Validators.password] },
+    ])
+
+    if (confirmI.value !== passI.value) {
+      confirmI.classList.add('error')
+      errEl.innerHTML = '<i class="ph ph-warning"></i> As senhas não coincidem.'
+      valid = false
+    }
+    if (!valid) return
+
+    const btn = document.getElementById('register-btn')
+    setLoading(btn, true)
+    try {
+      await AuthService.register({ name: nameI.value, email: emailI.value, password: passI.value })
+      Toast.success('Conta criada! Fazendo login...')
+      await AuthService.login(emailI.value, passI.value)
+      setTimeout(() => window.location.href = '/src/pages/profile.html', 1000)
+    } catch (err) {
+      Toast.error(err.response?.data?.error || 'Erro ao criar conta.')
+      setLoading(btn, false)
+    }
+  })
+</script>
+
+</body>
+</html>

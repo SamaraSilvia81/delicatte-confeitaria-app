@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Delicatte Confeitaria — Doces artesanais feitos com amor">
+  <title>Delicatte Confeitaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="/src/styles/index.css">
+  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+</head>
+<body>
+
+<!-- Efeito de luz no background -->
+<div class="lights" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════════
+     BANNER SLOT
+     Para editar: troque o texto dentro desta div.
+     Para esconder: adicione  style="display:none"
+══════════════════════════════════════════ -->
+<div class="banner-slot" id="banner-slot">
+  <strong>🍰 Novidade!</strong>
+  Caixa de Docinhos Sortidos com 12 unidades por apenas R$ 68,00.
+  <a href="#produtos">Ver agora</a>
+  <button class="banner-slot__close" id="banner-close" aria-label="Fechar banner">
+    <i class="ph ph-x"></i>
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<header id="navbar" role="banner">
+  <div class="navbar-inner">
+
+    <a href="/" class="nav-logo">Deli<em>catte</em></a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#produtos">Produtos</a></li>
+      <li><a href="#sobre">Nossa história</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="theme-toggle" aria-label="Alternar tema">
+        <i class="ph ph-moon" data-theme-icon></i>
+      </button>
+      <button class="icon-btn" id="cart-toggle" aria-label="Abrir carrinho">
+        <i class="ph ph-shopping-bag" style="font-size:1.2rem;"></i>
+        <span id="cart-badge">0</span>
+      </button>
+      <a href="/src/pages/login.html" class="btn btn-primary" id="nav-auth-btn">
+        <i class="ph ph-user"></i>
+        Entrar
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<main>
+  <section class="hero" aria-label="Apresentação">
+
+    <div class="hero-text">
+      <div class="hero-eyebrow">
+        <i class="ph ph-sparkle"></i>
+        Artesanal · Premium · Feito com amor
+      </div>
+      <h1 class="hero-title">
+        Cada doce,<br>
+        uma <em>história</em><br>
+        de afeto
+      </h1>
+      <p class="hero-desc">
+        Confeitaria artesanal com ingredientes selecionados,
+        receitas exclusivas e a dedicação de quem transforma
+        farinha e açúcar em momentos inesquecíveis.
+      </p>
+      <div class="hero-actions">
+        <a href="#produtos" class="btn btn-primary">
+          <i class="ph ph-storefront"></i>
+          Explorar produtos
+        </a>
+        <a href="#sobre" class="btn btn-outline">
+          Nossa história
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-placeholder">
+        <img class="hero-image"
+          src="/src/assets/img/hero.jpg"
+          alt="Bolo artesanal Delicatte">
+      </div>
+
+      <div class="hero-float tl">
+        <div class="float-icon" style="background:rgba(134,1,32,.1); color:var(--crimson);">
+          <i class="ph ph-star-four"></i>
+        </div>
+        <div>
+          <div class="float-label">4.9 ★</div>
+          <div class="float-sub">Avaliação média</div>
+        </div>
+      </div>
+
+      <div class="hero-float br">
+        <div class="float-icon" style="background:rgba(130,143,88,.15); color:var(--sage-dark);">
+          <i class="ph ph-package"></i>
+        </div>
+        <div>
+          <div class="float-label">Entrega</div>
+          <div class="float-sub">Recife & região</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PRODUTOS
+  ══════════════════════════════════════════ -->
+  <section class="products-section" id="produtos" aria-label="Nossos produtos">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="section-eyebrow">
+          <i class="ph ph-cookie"></i> Cardápio
+        </p>
+        <h2>Nossos <em>doces</em></h2>
+        <p>
+          Cada produto feito com carinho, ingredientes frescos
+          e técnicas que fazem toda a diferença no sabor final.
+        </p>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filtrar por categoria">
+        <button class="filter-btn active" data-cat="all">Todos</button>
+        <button class="filter-btn" data-cat="bolos">Bolos</button>
+        <button class="filter-btn" data-cat="tortas">Tortas</button>
+        <button class="filter-btn" data-cat="docinhos">Docinhos</button>
+        <button class="filter-btn" data-cat="sobremesas">Sobremesas</button>
+      </div>
+
+      <div id="products-grid" role="list"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SOBRE
+  ══════════════════════════════════════════ -->
+  <section class="about-section" id="sobre" aria-label="Nossa história">
+    <div class="about-grid">
+
+      <div class="about-visual">
+        <img class="hero-image"
+          src="/src/assets/img/about.jpg"
+          alt="Bolo artesanal Delicatte">
+      </div>
+      <div class="about-text">
+        <p class="section-eyebrow">
+          <i class="ph ph-sparkle"></i> Nossa história
+        </p>
+        <h2>
+          Feito com <em style="color:var(--crimson); font-style:italic;">afeto</em><br>
+          desde o início
+        </h2>
+        <p>
+          A Delicatte nasceu da paixão por transformar ingredientes simples
+          em momentos inesquecíveis. Cada receita carrega tradição, cuidado
+          e a dedicação de quem entende que um bom doce vai muito além do sabor.
+        </p>
+        <p>
+          Trabalhamos com ingredientes selecionados, sem conservantes artificiais,
+          produção 100% artesanal e entrega em Recife e região.
+        </p>
+        <div class="about-stats">
+          <div>
+            <div class="stat-value">+500</div>
+            <div class="stat-label">Clientes felizes</div>
+          </div>
+          <div>
+            <div class="stat-value">+80</div>
+            <div class="stat-label">Receitas únicas</div>
+          </div>
+          <div>
+            <div class="stat-value">5 anos</div>
+            <div class="stat-label">De história</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer id="contato" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-logo">Deli<em>catte</em></div>
+    <div class="footer-grid">
+      <div>
+        <p class="footer-desc">
+          Confeitaria artesanal em Recife.
+          Ingredientes selecionados e muito carinho em cada preparo.
+        </p>
+      </div>
+      <div>
+        <div class="footer-section-title">Navegação</div>
+        <ul class="footer-links">
+          <li><a href="#produtos">Produtos</a></li>
+          <li><a href="#sobre">Nossa história</a></li>
+          <li><a href="#">Acompanhar pedido</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-section-title">Contato</div>
+        <ul class="footer-links">
+          <li><a href="https://wa.me/5581999999999">
+            <i class="ph ph-whatsapp-logo"></i> WhatsApp</a></li>
+          <li><a href="mailto:ola@delicatte.com.br">
+            <i class="ph ph-envelope-simple"></i> E-mail</a></li>
+          <li><a href="#">
+            <i class="ph ph-instagram-logo"></i> Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Delicatte Confeitaria. Todos os direitos reservados.</span>
+      <span>Feito com <i class="ph ph-heart" style="color:var(--blush);"></i> em Recife</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     CART DRAWER
+══════════════════════════════════════════ -->
+<div class="cart-overlay" id="cart-overlay" aria-hidden="true"></div>
+
+<aside class="cart-drawer" id="cart-drawer" aria-label="Carrinho de compras">
+  <div style="display:flex;align-items:center;justify-content:space-between;
+              padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-soft);">
+    <h3 style="font-family:var(--font-display);font-size:1.4rem;">Meu carrinho</h3>
+    <button class="btn btn-ghost" id="cart-close" aria-label="Fechar carrinho">
+      <i class="ph ph-x"></i>
+    </button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div style="padding:1.25rem 1.5rem;border-top:1px solid var(--border-soft);">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-value" id="cart-total">R$ 0,00</span>
+    </div>
+    <button class="btn btn-primary"
+            style="width:100%;justify-content:center;padding:.85rem;"
+            id="checkout-btn">
+      <i class="ph ph-credit-card"></i>
+      Finalizar pedido
+    </button>
+  </div>
+</aside>
+
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════
+     CHECKOUT MODAL
+══════════════════════════════════════════ -->
+<div class="co-overlay" id="co-overlay" aria-hidden="true"></div>
+<div class="co-modal" id="co-modal" role="dialog" aria-modal="true" aria-label="Finalizar pedido">
+
+  <!-- Cabeçalho com steps -->
+  <div class="co-header">
+    <button class="btn btn-ghost co-back" id="co-back" aria-label="Voltar">
+      <i class="ph ph-arrow-left"></i>
+    </button>
+    <div class="co-steps">
+      <div class="co-step active" data-step="1"><span>1</span> Entrega</div>
+      <div class="co-step-line"></div>
+      <div class="co-step" data-step="2"><span>2</span> Pagamento</div>
+      <div class="co-step-line"></div>
+      <div class="co-step" data-step="3"><span>3</span> Confirmar</div>
+    </div>
+    <button class="btn btn-ghost co-close-btn" id="co-close" aria-label="Fechar">
+      <i class="ph ph-x"></i>
+    </button>
+  </div>
+
+  <!-- ── STEP 1: Endereço ── -->
+  <div class="co-body" id="co-step-1">
+    <h3 class="co-title">Onde entregamos?</h3>
+    <p class="co-subtitle">Informe o endereço de entrega</p>
+
+    <div class="co-form">
+      <div class="co-row">
+        <div class="form-group" style="flex:2">
+          <label class="form-label">Rua / Avenida *</label>
+          <input type="text" class="form-input" id="co-street" placeholder="Ex: Rua das Flores">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label class="form-label">Número *</label>
+          <input type="text" class="form-input" id="co-number" placeholder="123">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Complemento</label>
+        <input type="text" class="form-input" id="co-complement" placeholder="Apto, bloco, referência...">
+      </div>
+      <div class="co-row">
+        <div class="form-group" style="flex:1">
+          <label class="form-label">Bairro *</label>
+          <input type="text" class="form-input" id="co-neighborhood" placeholder="Centro">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label class="form-label">CEP *</label>
+          <input type="text" class="form-input" id="co-zip" placeholder="00000-000" maxlength="9">
+        </div>
+      </div>
+      <div class="co-row">
+        <div class="form-group" style="flex:2">
+          <label class="form-label">Cidade *</label>
+          <input type="text" class="form-input" id="co-city" placeholder="Recife">
+        </div>
+        <div class="form-group" style="flex:1">
+          <label class="form-label">Estado *</label>
+          <select class="form-input" id="co-state">
+            <option value="">UF</option>
+            <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+            <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+            <option>MG</option><option>PA</option><option>PB</option><option selected>PE</option>
+            <option>PI</option><option>RJ</option><option>RN</option><option>RS</option>
+            <option>RO</option><option>RR</option><option>SC</option><option>SP</option>
+            <option>SE</option><option>TO</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Opções de entrega -->
+      <div class="co-section-title">Tipo de entrega</div>
+      <div class="co-delivery-opts">
+        <label class="co-opt" data-delivery="standard">
+          <input type="radio" name="delivery" value="standard" checked>
+          <div class="co-opt-icon"><i class="ph ph-package"></i></div>
+          <div class="co-opt-info">
+            <div class="co-opt-name">Entrega padrão</div>
+            <div class="co-opt-detail">3–5 dias úteis</div>
+          </div>
+          <div class="co-opt-price">Grátis</div>
+        </label>
+        <label class="co-opt" data-delivery="express">
+          <input type="radio" name="delivery" value="express">
+          <div class="co-opt-icon" style="background:rgba(134,1,32,.1);color:var(--crimson)"><i class="ph ph-rocket-launch"></i></div>
+          <div class="co-opt-info">
+            <div class="co-opt-name">Entrega expressa</div>
+            <div class="co-opt-detail">Amanhã até 18h</div>
+          </div>
+          <div class="co-opt-price" style="color:var(--crimson)">+R$ 12,00</div>
+        </label>
+        <label class="co-opt" data-delivery="pickup">
+          <input type="radio" name="delivery" value="pickup">
+          <div class="co-opt-icon" style="background:rgba(130,143,88,.15);color:var(--sage-dark)"><i class="ph ph-storefront"></i></div>
+          <div class="co-opt-info">
+            <div class="co-opt-name">Retirar na loja</div>
+            <div class="co-opt-detail">Hoje a partir das 14h</div>
+          </div>
+          <div class="co-opt-price" style="color:var(--sage-dark)">Grátis</div>
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer fixo step 1 -->
+  <div class="co-footer" id="co-footer-1">
+    <button class="btn btn-primary co-next-btn" id="co-to-step2">
+      Ir para pagamento <i class="ph ph-arrow-right"></i>
+    </button>
+  </div>
+
+  <!-- ── STEP 2: Pagamento ── -->
+  <div class="co-body" id="co-step-2" style="display:none">
+    <h3 class="co-title">Como vai pagar?</h3>
+    <p class="co-subtitle">Todas as opções são simuladas</p>
+
+    <div class="co-pay-methods">
+      <label class="co-pay-card active" data-method="credit">
+        <input type="radio" name="payment" value="credit" checked>
+        <i class="ph ph-credit-card"></i>
+        <span>Cartão de crédito</span>
+      </label>
+      <label class="co-pay-card" data-method="debit">
+        <input type="radio" name="payment" value="debit">
+        <i class="ph ph-bank"></i>
+        <span>Cartão de débito</span>
+      </label>
+      <label class="co-pay-card" data-method="pix">
+        <input type="radio" name="payment" value="pix">
+        <i class="ph ph-qr-code"></i>
+        <span>Pix</span>
+      </label>
+      <label class="co-pay-card" data-method="boleto">
+        <input type="radio" name="payment" value="boleto">
+        <i class="ph ph-barcode"></i>
+        <span>Boleto</span>
+      </label>
+    </div>
+
+    <!-- Painel cartão -->
+    <div id="co-panel-credit" class="co-pay-panel">
+      <div class="co-credit-card" id="co-card-visual">
+        <div class="co-card-chip"><i class="ph ph-cpu"></i></div>
+        <div class="co-card-number" id="card-num-display">•••• •••• •••• ••••</div>
+        <div class="co-card-bottom">
+          <div>
+            <div class="co-card-label">Titular</div>
+            <div class="co-card-val" id="card-name-display">SEU NOME</div>
+          </div>
+          <div>
+            <div class="co-card-label">Validade</div>
+            <div class="co-card-val" id="card-exp-display">MM/AA</div>
+          </div>
+          <div class="co-card-brand"><i class="ph ph-circles-four"></i></div>
+        </div>
+      </div>
+      <div class="co-form">
+        <div class="form-group">
+          <label class="form-label">Número do cartão</label>
+          <input type="text" class="form-input" id="co-card-num" placeholder="0000 0000 0000 0000" maxlength="19">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nome no cartão</label>
+          <input type="text" class="form-input" id="co-card-name" placeholder="Como está no cartão">
+        </div>
+        <div class="co-row">
+          <div class="form-group">
+            <label class="form-label">Validade</label>
+            <input type="text" class="form-input" id="co-card-exp" placeholder="MM/AA" maxlength="5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CVV</label>
+            <input type="text" class="form-input" id="co-card-cvv" placeholder="•••" maxlength="3">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Parcelamento</label>
+          <select class="form-input" id="co-installments">
+            <option value="1">1x — à vista</option>
+            <option value="2">2x sem juros</option>
+            <option value="3">3x sem juros</option>
+            <option value="6">6x sem juros</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel débito -->
+    <div id="co-panel-debit" class="co-pay-panel" style="display:none">
+      <div class="co-form">
+        <div class="form-group">
+          <label class="form-label">Número do cartão</label>
+          <input type="text" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nome no cartão</label>
+          <input type="text" class="form-input" placeholder="Como está no cartão">
+        </div>
+        <div class="co-row">
+          <div class="form-group">
+            <label class="form-label">Validade</label>
+            <input type="text" class="form-input" placeholder="MM/AA" maxlength="5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CVV</label>
+            <input type="text" class="form-input" placeholder="•••" maxlength="3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel Pix -->
+    <div id="co-panel-pix" class="co-pay-panel" style="display:none">
+      <div class="co-pix-box">
+        <div class="co-qr-placeholder">
+          <i class="ph ph-qr-code" style="font-size:5rem;opacity:.15;"></i>
+          <div class="co-qr-lines">
+            <div></div><div></div><div></div><div></div>
+          </div>
+        </div>
+        <p class="co-pix-info">
+          <i class="ph ph-info"></i>
+          O QR Code será gerado na confirmação.<br>
+          Válido por <strong>30 minutos</strong>.
+        </p>
+        <div class="co-pix-key">
+          <span class="co-pix-key-label">Chave Pix:</span>
+          <code>delicatte@confeitaria.com.br</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel Boleto -->
+    <div id="co-panel-boleto" class="co-pay-panel" style="display:none">
+      <div class="co-boleto-box">
+        <i class="ph ph-barcode" style="font-size:3rem;color:var(--text-muted);display:block;margin-bottom:1rem;"></i>
+        <p style="font-size:.9rem;color:var(--text-2);line-height:1.7;">
+          O boleto será gerado após confirmar e terá vencimento em <strong>3 dias úteis</strong>.
+          O pedido só é separado após a confirmação do pagamento.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer fixo step 2 -->
+  <div class="co-footer" id="co-footer-2" style="display:none">
+    <button class="btn btn-primary co-next-btn" id="co-to-step3">
+      Revisar pedido <i class="ph ph-arrow-right"></i>
+    </button>
+  </div>
+
+  <!-- ── STEP 3: Confirmação ── -->
+  <div class="co-body" id="co-step-3" style="display:none">
+    <h3 class="co-title">Tudo certo?</h3>
+    <p class="co-subtitle">Revise antes de confirmar</p>
+
+    <div class="co-review">
+      <div class="co-review-section">
+        <div class="co-review-label"><i class="ph ph-map-pin"></i> Endereço de entrega</div>
+        <div class="co-review-val" id="co-review-addr">—</div>
+      </div>
+      <div class="co-review-section">
+        <div class="co-review-label"><i class="ph ph-credit-card"></i> Pagamento</div>
+        <div class="co-review-val" id="co-review-pay">—</div>
+      </div>
+      <div class="co-review-section">
+        <div class="co-review-label"><i class="ph ph-shopping-bag"></i> Itens do pedido</div>
+        <div id="co-review-items"></div>
+      </div>
+      <div class="co-review-total">
+        <span>Total</span>
+        <span id="co-review-total-val" style="font-family:var(--font-display);color:var(--crimson);font-size:1.4rem;"></span>
+      </div>
+    </div>
+
+    <div class="co-sim-note">
+      <i class="ph ph-shield-check"></i>
+      Compra 100% simulada — nenhum dado real é processado.
+    </div>
+
+  </div>
+
+  <!-- Footer fixo step 3 -->
+  <div class="co-footer" id="co-footer-3" style="display:none">
+    <button class="btn btn-primary co-next-btn" id="co-confirm-btn">
+      <i class="ph ph-check-circle"></i> Confirmar pedido
+    </button>
+  </div>
+
+  <!-- ── STEP 4: Processando ── -->
+  <div class="co-body co-processing" id="co-step-4" style="display:none">
+    <div class="co-process-anim">
+      <div class="co-process-ring"></div>
+      <i class="ph ph-credit-card co-process-icon"></i>
+    </div>
+    <h3 class="co-title">Processando pagamento…</h3>
+    <p class="co-subtitle">Aguarde um momento</p>
+    <div class="co-process-steps">
+      <div class="co-pstep" id="ps-1"><i class="ph ph-circle-dashed"></i> Verificando dados</div>
+      <div class="co-pstep" id="ps-2"><i class="ph ph-circle-dashed"></i> Confirmando pagamento</div>
+      <div class="co-pstep" id="ps-3"><i class="ph ph-circle-dashed"></i> Registrando pedido</div>
+    </div>
+  </div>
+
+  <!-- ── STEP 5: Sucesso ── -->
+  <div class="co-body co-success" id="co-step-5" style="display:none">
+    <div class="co-success-icon">
+      <i class="ph ph-check-fat"></i>
+    </div>
+    <h3 class="co-title" style="text-align:center">Pedido confirmado! 🎉</h3>
+    <p class="co-subtitle" style="text-align:center">
+      Obrigada pela compra. Você receberá uma confirmação em breve.
+    </p>
+    <div class="co-order-info">
+      <div class="co-order-num">
+        <span>Número do pedido</span>
+        <strong id="co-order-number">#DEL-00000</strong>
+      </div>
+      <div class="co-order-eta">
+        <i class="ph ph-clock"></i>
+        <span id="co-order-eta">Previsão de entrega: 3–5 dias úteis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer fixo step 5 -->
+  <div class="co-footer" id="co-footer-5" style="display:none">
+    <button class="btn btn-primary co-next-btn" id="co-done-btn">
+      <i class="ph ph-storefront"></i> Voltar à loja
+    </button>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script type="module">
+  import { ThemeManager, Toast, Format, SkeletonFactory, renderEmptyState, setLoading } from '/src/utils/ui.js'
+  import { ProductCard } from '/src/components/ProductCard.js'
+  import { CartService } from '/src/hooks/cart.js'
+  import { ProductService, OrderService, SessionService } from '/src/services/api.js'
+
+  ThemeManager.init()
+  ThemeManager.bind('#theme-toggle')
+
+  document.getElementById('banner-close').addEventListener('click', () => {
+    document.getElementById('banner-slot').style.display = 'none'
+  })
+
+  const session = SessionService.get()
+  const btn = document.getElementById('nav-auth-btn')
+  if (session?.token) {
+    if (session.role === 'admin') {
+      btn.innerHTML = `<i class="ph ph-gauge"></i> Painel Admin`
+      btn.href = '/src/admin/index.html'
+    } else {
+      btn.innerHTML = `<i class="ph ph-user-circle"></i> ${session.name || 'Conta'}`
+      btn.href = '/src/pages/profile.html'
+    }
+  } else {
+    btn.innerHTML = `<i class="ph ph-user"></i> Entrar`
+    btn.href = '/src/pages/login.html'
+  }
+
+  CartService.subscribe(({ items, count, total }) => {
+    const badge = document.getElementById('cart-badge')
+    badge.style.display = count > 0 ? 'flex' : 'none'
+    badge.textContent   = count
+    document.getElementById('cart-total').textContent = Format.currency(total)
+    _renderCartItems(items)
+  })
+
+  function _renderCartItems(items) {
+    const el = document.getElementById('cart-items')
+    if (!items.length) {
+      el.innerHTML = `
+        <div style="text-align:center;padding:3rem;color:var(--text-muted);">
+          <i class="ph ph-shopping-bag-open"
+             style="font-size:3rem;display:block;margin-bottom:1rem;opacity:.4;"></i>
+          <p>Seu carrinho está vazio</p>
+        </div>`
+      return
+    }
+    el.innerHTML = items.map(item => `
+      <div class="cart-item">
+        ${item.image
+          ? `<img src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">`
+          : `<div class="cart-item-icon"><i class="ph ph-cake"></i></div>`}
+        <div style="flex:1;">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">${Format.currency(item.price)}</div>
+          <div class="cart-item-qty">
+            <button class="qty-btn"
+                    onclick="window._cart.updateQty('${item.id}', ${item.qty - 1})">
+              <i class="ph ph-minus"></i>
+            </button>
+            <span style="min-width:20px;text-align:center;font-weight:500;">${item.qty}</span>
+            <button class="qty-btn"
+                    onclick="window._cart.updateQty('${item.id}', ${item.qty + 1})">
+              <i class="ph ph-plus"></i>
+            </button>
+            <button class="qty-btn remove"
+                    onclick="window._cart.remove('${item.id}')">
+              <i class="ph ph-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>`).join('')
+  }
+
+  window._cart = CartService
+
+  const drawer  = document.getElementById('cart-drawer')
+  const overlay = document.getElementById('cart-overlay')
+  const openCart  = () => { drawer.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow = 'hidden' }
+  const closeCart = () => { drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow = '' }
+
+  document.getElementById('cart-toggle').addEventListener('click', openCart)
+  document.getElementById('cart-close').addEventListener('click', closeCart)
+  overlay.addEventListener('click', closeCart)
+
+  // ══════════════════════════════════════════
+  //  CHECKOUT FLOW
+  // ══════════════════════════════════════════
+  const coOverlay = document.getElementById('co-overlay')
+  const coModal   = document.getElementById('co-modal')
+  const coBack    = document.getElementById('co-back')
+  let currentStep = 1
+
+  function openCheckout() {
+    closeCart()
+    coOverlay.classList.add('open')
+    coModal.classList.add('open')
+    coOverlay.removeAttribute('aria-hidden')
+    showStep(1)
+  }
+
+  function closeCheckout() {
+    coOverlay.classList.remove('open')
+    coModal.classList.remove('open')
+    coOverlay.setAttribute('aria-hidden', 'true')
+  }
+
+  coOverlay.addEventListener('click', closeCheckout)
+  document.getElementById('co-close').addEventListener('click', closeCheckout)
+
+  function showStep(n) {
+    currentStep = n
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById(`co-step-${i}`)
+      if (el) el.style.display = i === n ? 'flex' : 'none'
+      const ft = document.getElementById(`co-footer-${i}`)
+      if (ft) ft.style.display = i === n ? 'block' : 'none'
+    }
+    // Update step indicators (only steps 1-3)
+    document.querySelectorAll('.co-step').forEach(s => {
+      const sn = +s.dataset.step
+      s.classList.remove('active', 'done')
+      if (sn === n) s.classList.add('active')
+      else if (sn < n) s.classList.add('done')
+    })
+    // Back button visible from step 2
+    coBack.classList.toggle('visible', n > 1 && n < 4)
+  }
+
+  coBack.addEventListener('click', () => {
+    if (currentStep > 1 && currentStep < 4) showStep(currentStep - 1)
+  })
+
+  // ── Step 1 → 2: Endereço ──────────────────
+  document.getElementById('co-to-step2').addEventListener('click', () => {
+    const street = document.getElementById('co-street').value.trim()
+    const number = document.getElementById('co-number').value.trim()
+    const city   = document.getElementById('co-city').value.trim()
+    const zip    = document.getElementById('co-zip').value.trim()
+    if (!street || !number || !city || !zip) {
+      Toast.error('Preencha os campos obrigatórios do endereço.')
+      return
+    }
+    showStep(2)
+  })
+
+  // CEP mask
+  document.getElementById('co-zip').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'')
+    if (v.length > 5) v = v.slice(0,5) + '-' + v.slice(5,8)
+    this.value = v
+  })
+
+  // ── Payment method switch ─────────────────
+  document.querySelectorAll('.co-pay-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.co-pay-card').forEach(c => c.classList.remove('active'))
+      card.classList.add('active')
+      const method = card.dataset.method
+      ;['credit','debit','pix','boleto'].forEach(m => {
+        const p = document.getElementById(`co-panel-${m}`)
+        if (p) p.style.display = m === method ? 'block' : 'none'
+      })
+    })
+  })
+
+  // ── Credit card live preview ──────────────
+  document.getElementById('co-card-num').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'').slice(0,16)
+    this.value = v.replace(/(.{4})/g,'$1 ').trim()
+    const disp = v.padEnd(16,'•').replace(/(.{4})/g,'$1 ').trim()
+    document.getElementById('card-num-display').textContent = disp
+  })
+  document.getElementById('co-card-name').addEventListener('input', function() {
+    document.getElementById('card-name-display').textContent =
+      this.value.toUpperCase() || 'SEU NOME'
+  })
+  document.getElementById('co-card-exp').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'')
+    if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2,4)
+    this.value = v
+    document.getElementById('card-exp-display').textContent = v || 'MM/AA'
+  })
+
+  // ── Step 2 → 3: Revisar ───────────────────
+  document.getElementById('co-to-step3').addEventListener('click', () => {
+    const activeMethod = document.querySelector('.co-pay-card.active')?.dataset.method || 'credit'
+    const payLabels = { credit:'Cartão de crédito', debit:'Cartão de débito', pix:'Pix', boleto:'Boleto' }
+
+    if (activeMethod === 'credit' || activeMethod === 'debit') {
+      const num = document.getElementById('co-card-num').value.trim()
+      if (!num || num.replace(/\s/g,'').length < 16) {
+        Toast.error('Preencha o número do cartão.')
+        return
+      }
+    }
+
+    // Build review
+    const street = document.getElementById('co-street').value
+    const number = document.getElementById('co-number').value
+    const comp   = document.getElementById('co-complement').value
+    const city   = document.getElementById('co-city').value
+    const state  = document.getElementById('co-state').value
+    const zip    = document.getElementById('co-zip').value
+    const delivery = document.querySelector('input[name="delivery"]:checked')?.value || 'standard'
+    const deliveryLabels = { standard:'Entrega padrão (3–5 dias)', express:'Entrega expressa (amanhã)', pickup:'Retirar na loja' }
+    const deliveryFee = delivery === 'express' ? 12 : 0
+
+    document.getElementById('co-review-addr').innerHTML =
+      `${street}, ${number}${comp ? ' — ' + comp : ''}<br>${city} – ${state} | ${zip}<br><em style="color:var(--text-muted);font-size:.8rem">${deliveryLabels[delivery]}</em>`
+
+    const installments = document.getElementById('co-installments')?.value || '1'
+    const payDetail = (activeMethod === 'credit' && installments > 1)
+      ? `${payLabels[activeMethod]} — ${installments}x sem juros`
+      : payLabels[activeMethod]
+    document.getElementById('co-review-pay').textContent = payDetail
+
+    const items = CartService.getItems()
+    document.getElementById('co-review-items').innerHTML = items.map(i =>
+      `<div class="co-review-item">
+        <span>${i.name} × ${i.qty}</span>
+        <span>${Format.currency(i.price * i.qty)}</span>
+      </div>`
+    ).join('')
+
+    const total = CartService.getTotal() + deliveryFee
+    document.getElementById('co-review-total-val').textContent = Format.currency(total)
+
+    showStep(3)
+  })
+
+  // ── Step 3 → Processing → Success ────────
+  document.getElementById('co-confirm-btn').addEventListener('click', async () => {
+    showStep(4)
+
+    // Simulate processing steps
+    const steps = ['ps-1','ps-2','ps-3']
+    for (let i = 0; i < steps.length; i++) {
+      await new Promise(r => setTimeout(r, 900))
+      const el = document.getElementById(steps[i])
+      el.classList.remove('active')
+      el.classList.add('done')
+      if (i < steps.length - 1) {
+        document.getElementById(steps[i+1]).classList.add('active')
+      }
+    }
+
+    // Try to save order (optional — works if logged in)
+    try {
+      await OrderService.create(CartService.getItems(), CartService.getTotal())
+    } catch {}
+
+    await new Promise(r => setTimeout(r, 500))
+
+    // Generate order number
+    const orderNum = '#DEL-' + Math.floor(10000 + Math.random() * 90000)
+    document.getElementById('co-order-number').textContent = orderNum
+
+    const delivery = document.querySelector('input[name="delivery"]:checked')?.value || 'standard'
+    const etaMap = { standard:'Previsão: 3–5 dias úteis', express:'Previsão: amanhã até 18h', pickup:'Pronto para retirada hoje a partir das 14h' }
+    document.getElementById('co-order-eta').textContent = etaMap[delivery]
+
+    CartService.clear()
+    showStep(5)
+  })
+
+  document.getElementById('co-done-btn').addEventListener('click', () => {
+    closeCheckout()
+    showStep(1) // reset
+  })
+
+  document.getElementById('checkout-btn').addEventListener('click', () => {
+    if (CartService.isEmpty()) { Toast.error('Adicione produtos antes de finalizar.'); return }
+    openCheckout()
+  })
+
+  let _allProducts = []
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      const cat      = btn.dataset.cat
+      const filtered = cat === 'all' ? _allProducts : _allProducts.filter(p => p.category === cat)
+      ProductCard.renderList(document.getElementById('products-grid'), filtered)
+    })
+  })
+
+  async function loadProducts() {
+    const grid = document.getElementById('products-grid')
+    SkeletonFactory.renderCards(grid, 8)
+    try {
+      _allProducts = await ProductService.getAll()
+      ProductCard.renderList(grid, _allProducts)
+    } catch (err) {
+      console.error(err.message)
+      renderEmptyState(grid, 'Não foi possível carregar os produtos.', 'ph-wifi-slash')
+    }
+  }
+
+  loadProducts()
+</script>
+
+</body>
+</html>

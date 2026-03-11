@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Delicatte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="/src/styles/admin.css">
+  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════ -->
+<aside id="sidebar" aria-label="Menu lateral">
+
+  <div class="sb-header">
+    <span class="sb-logo">Deli<em>catte</em></span>
+    <button class="sb-toggle" id="sidebar-toggle" aria-label="Retrair menu">
+      <i class="ph ph-sidebar-simple"></i>
+    </button>
+  </div>
+
+  <nav class="sb-nav">
+
+    <div class="sb-section">
+      <div class="sb-section-title">Visão geral</div>
+      <button class="nav-link active" data-page="dashboard">
+        <i class="ph ph-squares-four"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-link" data-page="orders">
+        <i class="ph ph-receipt"></i>
+        <span>Pedidos</span>
+        <span class="nav-badge" id="pending-count">0</span>
+      </button>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-section-title">Catálogo</div>
+      <button class="nav-link" data-page="products">
+        <i class="ph ph-cookie"></i>
+        <span>Produtos</span>
+      </button>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-section-title">Sistema</div>
+      <a href="/" class="nav-link">
+        <i class="ph ph-storefront"></i>
+        <span>Ver loja</span>
+      </a>
+    </div>
+
+  </nav>
+
+  <div class="sb-footer">
+    <button class="nav-link" data-page="settings">
+      <i class="ph ph-gear-six"></i>
+      <span>Configurações</span>
+    </button>
+    <button class="nav-link" id="logout-btn">
+      <i class="ph ph-sign-out" style="color:#c0392b;"></i>
+      <span style="color:#c0392b;">Sair</span>
+    </button>
+  </div>
+
+</aside>
+
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<div class="admin-main">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <span id="page-title">Dashboard</span>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" id="theme-toggle" aria-label="Tema">
+        <i class="ph ph-moon" data-theme-icon></i>
+      </button>
+      <button class="btn btn-outline btn-sm" onclick="window.open('/','_blank')">
+        <i class="ph ph-eye"></i> Ver loja
+      </button>
+      <div class="admin-avatar" id="admin-avatar" title="Configurações" aria-label="Abrir configurações">A</div>
+    </div>
+  </header>
+
+  <!-- Conteúdo -->
+  <main class="admin-content">
+
+    <!-- ── DASHBOARD ── -->
+    <section id="page-dashboard">
+      <div class="metrics-grid">
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(134,1,32,.1); color:var(--crimson);">
+            <i class="ph ph-receipt"></i>
+          </div>
+          <div class="metric-value" id="m-orders">—</div>
+          <div class="metric-label">Pedidos hoje</div>
+          <div class="metric-delta"><i class="ph ph-trend-up"></i> +12% vs ontem</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(130,143,88,.15); color:var(--sage-dark);">
+            <i class="ph ph-currency-circle-dollar"></i>
+          </div>
+          <div class="metric-value" id="m-revenue">—</div>
+          <div class="metric-label">Faturamento (mês)</div>
+          <div class="metric-delta"><i class="ph ph-trend-up"></i> +8% vs anterior</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(250,209,218,.5); color:var(--crimson);">
+            <i class="ph ph-users"></i>
+          </div>
+          <div class="metric-value" id="m-customers">—</div>
+          <div class="metric-label">Clientes</div>
+          <div class="metric-delta"><i class="ph ph-trend-up"></i> +3 esta semana</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(130,143,88,.15); color:var(--sage-dark);">
+            <i class="ph ph-cookie"></i>
+          </div>
+          <div class="metric-value" id="m-products">—</div>
+          <div class="metric-label">Produtos ativos</div>
+          <div class="metric-delta" style="color:var(--text-muted);">
+            <i class="ph ph-minus"></i> Sem alteração
+          </div>
+        </div>
+
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h4 class="table-title">Pedidos recentes</h4>
+          <button class="btn btn-primary btn-sm" id="ver-pedidos">Ver todos</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Itens</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="recent-orders"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── PRODUTOS ── -->
+    <section id="page-products" style="display:none;">
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-wrap">
+            <i class="ph ph-magnifying-glass"></i>
+            <input type="text" class="form-input" id="product-search" placeholder="Buscar produto...">
+          </div>
+          <button class="btn btn-primary" id="new-product-btn">
+            <i class="ph ph-plus"></i> Novo produto
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Preço</th>
+              <th>Destaque</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── PEDIDOS ── -->
+    <section id="page-orders" style="display:none;">
+      <div class="content-tabs" id="order-tabs">
+        <button class="ctab active" data-status="all">Todos</button>
+        <button class="ctab" data-status="pending">Pendentes</button>
+        <button class="ctab" data-status="preparing">Preparando</button>
+        <button class="ctab" data-status="ready">Prontos</button>
+        <button class="ctab" data-status="delivered">Entregues</button>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── CONFIGURAÇÕES ── -->
+    <section id="page-settings" style="display:none;">
+      <div class="settings-wrap">
+        <h3 class="settings-title">Configurações</h3>
+        <div class="table-card settings-card">
+          <div class="settings-user">
+            <div class="settings-avatar" id="settings-av">A</div>
+            <div>
+              <div class="settings-name"  id="settings-name">—</div>
+              <div class="settings-email" id="settings-email">—</div>
+            </div>
+          </div>
+          <div class="theme-row">
+            <span>Modo escuro</span>
+            <button class="btn btn-outline btn-sm" id="theme-toggle-2">
+              <i class="ph ph-moon" data-theme-icon></i> Alternar
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL — Produto
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;
+                padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-soft);">
+      <h3 id="modal-title" style="font-family:var(--font-display);">Novo produto</h3>
+      <button class="btn btn-ghost" id="modal-close"><i class="ph ph-x"></i></button>
+    </div>
+
+    <div style="padding:1.5rem;">
+      <form style="display:flex;flex-direction:column;gap:1rem;"
+            id="product-form" novalidate>
+        <input type="hidden" id="p-id">
+
+        <div class="form-group">
+          <label class="form-label" for="p-name">Nome *</label>
+          <input type="text" id="p-name" class="form-input" placeholder="Ex: Bolo Red Velvet">
+          <span class="form-error" id="p-name-error"></span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label" for="p-price">Preço (R$) *</label>
+            <input type="number" id="p-price" class="form-input"
+                   placeholder="0.00" min="0" step="0.01">
+            <span class="form-error" id="p-price-error"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="p-cat">Categoria *</label>
+            <select id="p-cat" class="form-input">
+              <option value="">Selecione...</option>
+              <option value="bolos">Bolos</option>
+              <option value="tortas">Tortas</option>
+              <option value="docinhos">Docinhos</option>
+              <option value="sobremesas">Sobremesas</option>
+            </select>
+            <span class="form-error" id="p-cat-error"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="p-desc">Descrição</label>
+          <textarea id="p-desc" class="form-input" rows="3"
+                    placeholder="Descreva o produto..."
+                    style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="p-img">URL da imagem</label>
+          <input type="url" id="p-img" class="form-input" placeholder="https://...">
+        </div>
+
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <input type="checkbox" id="p-featured"
+                 style="width:16px;height:16px;accent-color:var(--crimson);">
+          <label for="p-featured" style="font-size:.9rem;cursor:pointer;">
+            Produto em destaque
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <div style="padding:1rem 1.5rem;border-top:1px solid var(--border-soft);
+                display:flex;gap:.75rem;justify-content:flex-end;">
+      <button class="btn btn-outline" id="modal-cancel">Cancelar</button>
+      <button class="btn btn-primary" id="modal-save">
+        <i class="ph ph-floppy-disk"></i> Salvar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script type="module">
+  import { ThemeManager, Toast, Format, SkeletonFactory, Validators, validateForm, setLoading } from '/src/utils/ui.js'
+  import { AdminProductRow } from '/src/components/ProductCard.js'
+  import { AuthService, SessionService, ProductService, OrderService } from '/src/services/api.js'
+
+  ThemeManager.init()
+  ThemeManager.bind('#theme-toggle, #theme-toggle-2')
+  AuthService.requireAdmin()
+
+  const session = SessionService.get()
+  if (session) {
+    const init = (session.name || 'A')[0].toUpperCase()
+    document.getElementById('admin-avatar').textContent  = init
+    document.getElementById('settings-av').textContent   = init
+    document.getElementById('settings-name').textContent  = session.name || '—'
+    document.getElementById('settings-email').textContent = session.username || '—'
+  }
+
+  // ── Sidebar ────────────────────────────────
+  const sidebar = document.getElementById('sidebar')
+  const SK = 'delicatte_sidebar'
+  if (localStorage.getItem(SK) === 'collapsed') sidebar.classList.add('collapsed')
+
+  document.getElementById('sidebar-toggle').addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed')
+    localStorage.setItem(SK, sidebar.classList.contains('collapsed') ? 'collapsed' : 'expanded')
+  })
+
+  // ── Navegação entre seções ─────────────────
+  const TITLES = {
+    dashboard:   'Dashboard',
+    products:    'Produtos',
+    orders:      'Pedidos',
+    settings:    'Configurações',
+  }
+
+  function loadPage(page) {
+    document.querySelectorAll('[id^="page-"]').forEach(s => s.style.display = 'none')
+    const sec = document.getElementById(`page-${page}`)
+    if (sec) sec.style.display = 'block'
+    document.getElementById('page-title').textContent = TITLES[page] || page
+    document.querySelectorAll('.nav-link[data-page]').forEach(l => {
+      l.classList.toggle('active', l.dataset.page === page)
+    })
+    if (page === 'dashboard') loadDashboard()
+    if (page === 'products')  loadProducts()
+    if (page === 'orders')    loadOrders()
+  }
+
+  document.querySelectorAll('.nav-link[data-page]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (link.tagName === 'A') return
+      e.preventDefault()
+      loadPage(link.dataset.page)
+    })
+  })
+
+  document.getElementById('ver-pedidos').addEventListener('click', () => loadPage('orders'))
+  document.getElementById('admin-avatar').addEventListener('click', () => loadPage('settings'))
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    try { await AuthService.logout() } catch {}
+    window.location.href = '/src/pages/login.html'
+  })
+
+  // ══════════════════════════════════════════
+  //  DASHBOARD
+  // ══════════════════════════════════════════
+  async function loadDashboard() {
+    try {
+      const [products, orders] = await Promise.all([
+        ProductService.getAll(),
+        OrderService.getAll(),
+      ])
+      const today = new Date().toDateString()
+      document.getElementById('m-products').textContent  = products.length
+      document.getElementById('m-orders').textContent    =
+        orders.filter(o => new Date(o.createdAt).toDateString() === today).length
+      document.getElementById('m-customers').textContent = '—'
+      const rev = orders.filter(o => o.status === 'delivered')
+                        .reduce((s, o) => s + (o.total || 0), 0)
+      document.getElementById('m-revenue').textContent   = Format.currency(rev)
+      document.getElementById('pending-count').textContent =
+        orders.filter(o => o.status === 'pending').length
+      renderRecentOrders(orders.slice(0, 5))
+    } catch {
+      document.getElementById('m-products').textContent  = '15'
+      document.getElementById('m-orders').textContent    = '7'
+      document.getElementById('m-revenue').textContent   = Format.currency(1840)
+      document.getElementById('m-customers').textContent = '42'
+      renderRecentOrders(mockOrders())
+    }
+  }
+
+  function renderRecentOrders(orders) {
+    document.getElementById('recent-orders').innerHTML = orders.map(o => `
+      <tr>
+        <td style="font-weight:500;">${o.customerName || '—'}</td>
+        <td style="color:var(--text-muted);">${o.items?.length || 0} itens</td>
+        <td style="font-family:var(--font-display);color:var(--crimson);">
+          ${Format.currency(o.total || 0)}</td>
+        <td>${Format.statusBadge(o.status)}</td>
+        <td style="color:var(--text-muted);font-size:.8rem;">
+          ${Format.date(o.createdAt || new Date())}</td>
+      </tr>`).join('')
+  }
+
+  // ══════════════════════════════════════════
+  //  PRODUTOS
+  // ══════════════════════════════════════════
+  let _products = []
+
+  async function loadProducts() {
+    const tbody = document.getElementById('products-tbody')
+    tbody.innerHTML = Array(5).fill(SkeletonFactory.row()).join('')
+    try   { _products = await ProductService.getAll() }
+    catch { _products = [] }
+    renderProductsTable(_products)
+  }
+
+  function renderProductsTable(list) {
+    const tbody = document.getElementById('products-tbody')
+    tbody.innerHTML = ''
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="5"
+        style="text-align:center;padding:2rem;color:var(--text-muted);">
+        Nenhum produto encontrado.</td></tr>`
+      return
+    }
+    list.forEach(p => tbody.appendChild(AdminProductRow.create(p, openEditModal, confirmDelete)))
+  }
+
+  document.getElementById('product-search')?.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase()
+    renderProductsTable(
+      _products.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.category || '').toLowerCase().includes(q)
+      )
+    )
+  })
+
+  // ── Modal ──────────────────────────────────
+  const modal = document.getElementById('product-modal')
+
+  function openModal(title, p = null) {
+    document.getElementById('modal-title').textContent  = title
+    document.getElementById('p-id').value               = p?.objectId || ''
+    document.getElementById('p-name').value             = p?.name || ''
+    document.getElementById('p-price').value            = p?.price || ''
+    document.getElementById('p-cat').value              = p?.category || ''
+    document.getElementById('p-desc').value             = p?.description || ''
+    document.getElementById('p-img').value              = p?.imageUrl || p?.image || ''
+    document.getElementById('p-featured').checked       = p?.featured || false
+    modal.classList.add('open')
+  }
+  const closeModal = () => modal.classList.remove('open')
+
+  document.getElementById('new-product-btn')?.addEventListener('click', () => openModal('Novo produto'))
+  document.getElementById('modal-close')?.addEventListener('click', closeModal)
+  document.getElementById('modal-cancel')?.addEventListener('click', closeModal)
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal() })
+
+  function openEditModal(p) { openModal('Editar produto', p) }
+
+  document.getElementById('modal-save')?.addEventListener('click', async () => {
+    const id    = document.getElementById('p-id').value
+    const nameI = document.getElementById('p-name')
+    const priI  = document.getElementById('p-price')
+    const catI  = document.getElementById('p-cat')
+
+    if (!validateForm([
+      { input: nameI, validators: [Validators.required] },
+      { input: priI,  validators: [Validators.required, Validators.positiveNumber] },
+      { input: catI,  validators: [Validators.required] },
+    ])) return
+
+    const data = {
+      name:        nameI.value,
+      price:       parseFloat(priI.value),
+      category:    catI.value,
+      description: document.getElementById('p-desc').value,
+      imageUrl:    document.getElementById('p-img').value,
+      featured:    document.getElementById('p-featured').checked,
+    }
+
+    const btn = document.getElementById('modal-save')
+    setLoading(btn, true)
+    try {
+      if (id) { await ProductService.update(id, data); Toast.success('Produto atualizado!') }
+      else    { await ProductService.create(data);      Toast.success('Produto criado!') }
+      closeModal()
+      loadProducts()
+    } catch { Toast.error('Erro ao salvar. Verifique o Back4App.') }
+    finally  { setLoading(btn, false) }
+  })
+
+  async function confirmDelete(p) {
+    if (!confirm(`Excluir "${p.name}"?`)) return
+    try   { await ProductService.delete(p.objectId); Toast.success('Excluído.'); loadProducts() }
+    catch { Toast.error('Erro ao excluir.') }
+  }
+
+  // ══════════════════════════════════════════
+  //  PEDIDOS
+  // ══════════════════════════════════════════
+  let _orders = [], _orderStatus = 'all'
+
+  async function loadOrders() {
+    const tbody = document.getElementById('orders-tbody')
+    tbody.innerHTML = Array(5).fill(SkeletonFactory.row()).join('')
+    try   { _orders = await OrderService.getAll() }
+    catch { _orders = mockOrders() }
+    renderOrders(_orders)
+  }
+
+  const STATUS_FLOW = ['pending','confirmed','preparing','ready','delivered']
+  const STATUS_LABELS = {
+    pending:   { label: 'Pendente',   icon: 'ph-clock',        color: '#b45309', bg: 'rgba(180,83,9,.1)'   },
+    confirmed: { label: 'Confirmado', icon: 'ph-check',        color: '#2563eb', bg: 'rgba(37,99,235,.1)'  },
+    preparing: { label: 'Preparando', icon: 'ph-fire',         color: '#7c3aed', bg: 'rgba(124,58,237,.1)' },
+    ready:     { label: 'Pronto',     icon: 'ph-package',      color: '#059669', bg: 'rgba(5,150,105,.1)'  },
+    delivered: { label: 'Entregue',   icon: 'ph-check-circle', color: '#16a34a', bg: 'rgba(22,163,74,.12)' },
+    cancelled: { label: 'Cancelado',  icon: 'ph-x-circle',     color: '#dc2626', bg: 'rgba(220,38,38,.1)'  },
+  }
+
+  function nextStatus(current) {
+    const i = STATUS_FLOW.indexOf(current)
+    return i >= 0 && i < STATUS_FLOW.length - 1 ? STATUS_FLOW[i + 1] : null
+  }
+
+  function statusBadgeAdmin(status) {
+    const s = STATUS_LABELS[status] || STATUS_LABELS.pending
+    return `<span style="display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .7rem;border-radius:99px;font-size:.75rem;font-weight:600;background:${s.bg};color:${s.color};"><i class="ph ${s.icon}"></i>${s.label}</span>`
+  }
+
+  function renderOrders(list) {
+    const filtered = _orderStatus === 'all'
+      ? list
+      : list.filter(o => o.status === _orderStatus)
+
+    document.getElementById('orders-tbody').innerHTML = filtered.map(o => {
+      const next = nextStatus(o.status)
+      const nextLabel = next ? STATUS_LABELS[next]?.label : null
+      return `
+      <tr>
+        <td style="font-family:monospace;font-size:.78rem;color:var(--text-muted);">
+          #${(o.objectId || o.id || '').slice(-6)}</td>
+        <td style="font-weight:500;">${o.customerName || '—'}</td>
+        <td style="font-family:var(--font-display);color:var(--crimson);">
+          ${Format.currency(o.total || 0)}</td>
+        <td>${statusBadgeAdmin(o.status)}</td>
+        <td style="color:var(--text-muted);font-size:.8rem;">
+          ${Format.dateTime(o.createdAt || new Date())}</td>
+        <td>
+          <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+            ${nextLabel ? `<button onclick="window._updateStatus('${o.objectId || o.id}', '${next}')"
+                style="display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .75rem;border-radius:8px;font-size:.75rem;font-weight:500;background:var(--crimson);color:#fff;border:none;cursor:pointer;" >
+                <i class="ph ph-arrow-right"></i> Avançar para ${nextLabel}
+              </button>` : ''}
+            ${o.status !== 'cancelled' && o.status !== 'delivered' ? `<button onclick="window._updateStatus('${o.objectId || o.id}', 'cancelled')"
+                style="display:inline-flex;align-items:center;gap:.3rem;padding:.3rem .6rem;border-radius:8px;font-size:.72rem;background:rgba(220,38,38,.1);color:#dc2626;border:1px solid rgba(220,38,38,.2);cursor:pointer;">
+                <i class="ph ph-x"></i> Cancelar
+              </button>` : ''}
+            ${o.status === 'delivered' ? '<span style="color:var(--text-muted);font-size:.78rem;">✓ Concluído</span>' : ''}
+            ${o.status === 'cancelled' ? '<span style="color:#dc2626;font-size:.78rem;">✗ Cancelado</span>' : ''}
+          </div>
+        </td>
+      </tr>`
+    }).join('')
+  }
+
+  window._updateStatus = async (id, status) => {
+    try {
+      await OrderService.updateStatus(id, status)
+      // Atualiza localmente sem recarregar da API
+      const order = _orders.find(o => (o.objectId || o.id) === id)
+      if (order) order.status = status
+      renderOrders(_orders)
+      Toast.success(`Status → ${STATUS_LABELS[status]?.label || status}`)
+    } catch {
+      Toast.error('Erro ao atualizar status.')
+    }
+  }
+
+  document.getElementById('order-tabs')?.addEventListener('click', e => {
+    const tab = e.target.closest('.ctab')
+    if (!tab) return
+    document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'))
+    tab.classList.add('active')
+    _orderStatus = tab.dataset.status
+    renderOrders(_orders)
+  })
+
+  function mockOrders() {
+    return [
+      { objectId:'o1', customerName:'Ana Lima',    total:159.80, status:'pending',   createdAt: new Date().toISOString(),                   items:[{},{}] },
+      { objectId:'o2', customerName:'João Pedro',  total:89.90,  status:'preparing', createdAt: new Date().toISOString(),                   items:[{}]   },
+      { objectId:'o3', customerName:'Maria Clara', total:46.00,  status:'delivered', createdAt: new Date(Date.now()-86400000).toISOString(), items:[{},{}] },
+      { objectId:'o4', customerName:'Lucas Souza', total:68.00,  status:'ready',     createdAt: new Date().toISOString(),                   items:[{}]   },
+    ]
+  }
+
+  // Inicia na dashboard
+  loadDashboard()
+</script>
+
+</body>
+</html>

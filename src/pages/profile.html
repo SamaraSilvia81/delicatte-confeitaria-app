@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha conta · Delicatte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="/src/styles/index.css">
+  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+  <style>
+    body { min-height: 100vh; background: var(--bg); }
+
+    .profile-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 6rem;
+    }
+
+    /* ── Avatar section ── */
+    .profile-hero {
+      display: flex; align-items: center; gap: 1.75rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .profile-avatar-wrap {
+      position: relative; flex-shrink: 0; cursor: pointer;
+    }
+    .profile-avatar-lg {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--crimson), var(--blush));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 2.4rem; font-weight: 300;
+      color: #fff;
+      overflow: hidden;
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--border);
+      transition: box-shadow var(--t);
+    }
+    .profile-avatar-lg img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 50%;
+    }
+    .profile-avatar-wrap:hover .profile-avatar-lg {
+      box-shadow: 0 0 0 2px var(--crimson);
+    }
+    .avatar-edit-badge {
+      position: absolute; bottom: 2px; right: 2px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--crimson); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; border: 2px solid var(--bg);
+      pointer-events: none;
+    }
+    .avatar-upload-hint {
+      font-size: .72rem; color: var(--text-muted);
+      margin-top: .4rem; text-align: center;
+    }
+    #avatar-file-input { display: none; }
+
+    .profile-hero-info h1 {
+      font-family: var(--font-display);
+      font-size: 1.9rem; font-weight: 300; line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .profile-hero-email { font-size: .85rem; color: var(--text-muted); }
+    .profile-hero-badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      background: rgba(134,1,32,.08); color: var(--crimson);
+      padding: .2rem .7rem; border-radius: 99px;
+      font-size: .7rem; font-weight: 500; letter-spacing: .06em;
+      margin-top: .5rem;
+    }
+
+    /* ── Tabs ── */
+    .profile-tabs {
+      display: flex; gap: 0;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 3px; margin-bottom: 2rem;
+      width: fit-content;
+    }
+    .ptab {
+      padding: .5rem 1.3rem;
+      border-radius: calc(var(--radius-md) - 3px);
+      font-size: .85rem; font-weight: 500;
+      color: var(--text-muted);
+      transition: all var(--t);
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .ptab.active { background: var(--crimson); color: #fff; }
+
+    /* ── Panel sections ── */
+    .panel-section { display: none; }
+    .panel-section.active { display: block; }
+
+    /* ── Form card ── */
+    .pcard {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .pcard-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem; font-weight: 400;
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+    }
+    .pcard-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media (max-width: 540px) {
+      .pcard-grid { grid-template-columns: 1fr; }
+      .profile-hero { flex-direction: column; text-align: center; }
+      .profile-tabs { width: 100%; }
+    }
+
+    .edit-toggle-btn {
+      font-size: .78rem; color: var(--crimson);
+      display: flex; align-items: center; gap: .3rem;
+      cursor: pointer; background: none; border: none;
+      font-family: inherit; font-weight: 500;
+      padding: .3rem .6rem; border-radius: 6px;
+      transition: background var(--t);
+    }
+    .edit-toggle-btn:hover { background: rgba(134,1,32,.07); }
+
+    .form-input[readonly] {
+      background: var(--bg-surface) !important;
+      color: var(--text-muted) !important;
+      cursor: default;
+    }
+    .form-input:not([readonly]) {
+      background: var(--bg) !important;
+      color: var(--text-1) !important;
+    }
+
+    .save-row {
+      display: none; gap: .75rem; margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-soft);
+    }
+    .save-row.visible { display: flex; }
+
+    /* ── Password card ── */
+    .pw-grid { display: flex; flex-direction: column; gap: .9rem; }
+
+    /* ── Orders ── */
+    .order-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      transition: box-shadow var(--t);
+    }
+    .order-card:hover { box-shadow: var(--shadow-md); }
+    .order-card-top {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: .6rem;
+    }
+    .order-id { font-family: monospace; font-size: .78rem; color: var(--text-muted); }
+    .order-date { font-size: .8rem; color: var(--text-muted); }
+    .order-items { font-size: .88rem; color: var(--text-2); margin-bottom: .75rem; }
+    .order-footer { display: flex; align-items: center; justify-content: space-between; }
+    .order-total { font-family: var(--font-display); font-size: 1.3rem; color: var(--crimson); }
+    .empty-orders { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+    .empty-orders i { font-size: 3rem; opacity: .3; display: block; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+<div class="lights" aria-hidden="true"></div>
+
+<header id="navbar" role="banner">
+  <div class="navbar-inner">
+    <a href="/" class="nav-logo">Deli<em>catte</em></a>
+    <ul class="nav-links" role="list"></ul>
+    <div class="nav-actions">
+      <button class="icon-btn" id="theme-toggle" aria-label="Tema">
+        <i class="ph ph-moon" data-theme-icon></i>
+      </button>
+      <a href="/" class="btn btn-outline btn-sm">
+        <i class="ph ph-arrow-left"></i> Voltar à loja
+      </a>
+      <button class="btn btn-primary btn-sm" id="logout-btn">
+        <i class="ph ph-sign-out"></i> Sair
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="profile-wrap">
+
+    <!-- Avatar + info -->
+    <div class="profile-hero">
+      <div>
+        <label class="profile-avatar-wrap" for="avatar-file-input" title="Trocar foto">
+          <div class="profile-avatar-lg" id="profile-avatar-el">?</div>
+          <div class="avatar-edit-badge"><i class="ph ph-camera"></i></div>
+        </label>
+        <div class="avatar-upload-hint">Clique para trocar</div>
+        <input type="file" id="avatar-file-input" accept="image/*">
+      </div>
+      <div class="profile-hero-info">
+        <h1 id="profile-name">—</h1>
+        <div class="profile-hero-email" id="profile-email">—</div>
+        <div class="profile-hero-badge" id="profile-badge">
+          <i class="ph ph-user"></i> Cliente
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profile-tabs">
+      <button class="ptab active" data-section="orders">
+        <i class="ph ph-receipt"></i> Meus pedidos
+      </button>
+      <button class="ptab" data-section="info">
+        <i class="ph ph-user-gear"></i> Minha conta
+      </button>
+    </div>
+
+    <!-- ═══ PEDIDOS ═══ -->
+    <div class="panel-section active" id="section-orders">
+      <div id="orders-list">
+        <div style="text-align:center;padding:3rem;color:var(--text-muted);">
+          <i class="ph ph-spinner" style="font-size:2rem;display:block;margin-bottom:.75rem;animation:spin .8s linear infinite;"></i>
+          Carregando pedidos...
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ MINHA CONTA ═══ -->
+    <div class="panel-section" id="section-info">
+
+      <!-- Dados pessoais -->
+      <div class="pcard">
+        <div class="pcard-title">
+          Dados pessoais
+          <button class="edit-toggle-btn" id="edit-info-btn">
+            <i class="ph ph-pencil-simple"></i> Editar
+          </button>
+        </div>
+        <div class="pcard-grid">
+          <div class="form-group">
+            <label class="form-label">Nome completo</label>
+            <div class="input-with-icon" style="position:relative;">
+              <i class="ph ph-user icon"></i>
+              <input type="text" class="form-input" id="acc-name"
+                     placeholder="Seu nome" readonly style="padding-left:2.5rem;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefone / WhatsApp</label>
+            <div class="input-with-icon" style="position:relative;">
+              <i class="ph ph-phone icon"></i>
+              <input type="tel" class="form-input" id="acc-phone"
+                     placeholder="(00) 90000-0000" readonly style="padding-left:2.5rem;">
+            </div>
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">E-mail</label>
+            <div class="input-with-icon" style="position:relative;">
+              <i class="ph ph-envelope-simple icon"></i>
+              <input type="email" class="form-input" id="acc-email"
+                     placeholder="seu@email.com" readonly style="padding-left:2.5rem;">
+            </div>
+            <span style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem;display:block;">
+              <i class="ph ph-info"></i> O e-mail é seu login e não pode ser alterado aqui.
+            </span>
+          </div>
+        </div>
+        <div class="save-row" id="save-info-row">
+          <button class="btn btn-primary btn-sm" id="save-info-btn">
+            <i class="ph ph-floppy-disk"></i> Salvar alterações
+          </button>
+          <button class="btn btn-outline btn-sm" id="cancel-info-btn">Cancelar</button>
+        </div>
+      </div>
+
+      <!-- Alterar senha -->
+      <div class="pcard">
+        <div class="pcard-title">
+          Alterar senha
+          <button class="edit-toggle-btn" id="edit-pw-btn">
+            <i class="ph ph-lock-simple"></i> Alterar
+          </button>
+        </div>
+        <div class="pw-grid" id="pw-fields" style="display:none;">
+          <div class="form-group">
+            <label class="form-label">Senha atual</label>
+            <div class="input-with-icon" style="position:relative;">
+              <i class="ph ph-lock-simple icon"></i>
+              <input type="password" class="form-input" id="pw-current"
+                     placeholder="••••••••" style="padding-left:2.5rem;">
+              <button type="button" class="eye-btn" data-target="pw-current">
+                <i class="ph ph-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nova senha</label>
+            <div class="input-with-icon" style="position:relative;">
+              <i class="ph ph-lock-simple icon"></i>
+              <input type="password" class="form-input" id="pw-new"
+                     placeholder="Mínimo 6 caracteres" style="padding-left:2.5rem;">
+              <button type="button" class="eye-btn" data-target="pw-new">
+                <i class="ph ph-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirmar nova senha</label>
+            <div class="input-with-icon" style="position:relative;">
+              <i class="ph ph-lock-simple-open icon"></i>
+              <input type="password" class="form-input" id="pw-confirm"
+                     placeholder="Repita a nova senha" style="padding-left:2.5rem;">
+            </div>
+          </div>
+          <div class="save-row visible" style="margin-top:0;padding-top:0;border:none;">
+            <button class="btn btn-primary btn-sm" id="save-pw-btn">
+              <i class="ph ph-floppy-disk"></i> Salvar nova senha
+            </button>
+            <button class="btn btn-outline btn-sm" id="cancel-pw-btn">Cancelar</button>
+          </div>
+        </div>
+        <p id="pw-hint" style="font-size:.85rem;color:var(--text-muted);">
+          Clique em "Alterar" para definir uma nova senha.
+        </p>
+      </div>
+
+    </div><!-- /section-info -->
+
+  </div>
+</main>
+
+<div id="toast-container"></div>
+
+<script type="module">
+  import { ThemeManager, Toast, Format, setLoading } from '/src/utils/ui.js'
+  import { AuthService, SessionService, OrderService } from '/src/services/api.js'
+
+  ThemeManager.init()
+  ThemeManager.bind('#theme-toggle')
+
+  if (!SessionService.isLoggedIn()) {
+    window.location.replace('/src/pages/login.html')
+  }
+
+  let session = SessionService.get()
+
+  // ── Render avatar + info ──────────────────
+  function renderProfile() {
+    session = SessionService.get()
+    const avatarEl = document.getElementById('profile-avatar-el')
+    if (session.avatar) {
+      avatarEl.innerHTML = `<img src="${session.avatar}" alt="foto">`
+    } else {
+      avatarEl.textContent = (session.name || '?')[0].toUpperCase()
+      avatarEl.innerHTML = (session.name || '?')[0].toUpperCase()
+    }
+    document.getElementById('profile-name').textContent  = session.name || '—'
+    document.getElementById('profile-email').textContent = session.username || '—'
+    const badge = document.getElementById('profile-badge')
+    badge.innerHTML = session.role === 'admin'
+      ? '<i class="ph ph-shield-check"></i> Administrador'
+      : '<i class="ph ph-user"></i> Cliente'
+
+    document.getElementById('acc-name').value  = session.name || ''
+    document.getElementById('acc-phone').value = session.phone || ''
+    document.getElementById('acc-email').value = session.username || ''
+  }
+  renderProfile()
+
+  // ── Upload de foto ────────────────────────
+  document.getElementById('avatar-file-input').addEventListener('change', async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    if (file.size > 2 * 1024 * 1024) {
+      Toast.error('Imagem muito grande. Máximo 2MB.')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = async (ev) => {
+      const base64 = ev.target.result // data:image/...;base64,...
+      try {
+        await AuthService.updateProfile({ avatar: base64 })
+        renderProfile()
+        Toast.success('Foto atualizada!')
+      } catch {
+        Toast.error('Erro ao salvar foto.')
+      }
+    }
+    reader.readAsDataURL(file)
+  })
+
+  // ── Tabs ──────────────────────────────────
+  document.querySelectorAll('.ptab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'))
+      document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'))
+      tab.classList.add('active')
+      document.getElementById(`section-${tab.dataset.section}`).classList.add('active')
+    })
+  })
+
+  // ── Editar dados pessoais ─────────────────
+  let editingInfo = false
+
+  document.getElementById('edit-info-btn').addEventListener('click', () => {
+    editingInfo = true
+    ;['acc-name','acc-phone'].forEach(id =>
+      document.getElementById(id).removeAttribute('readonly'))
+    document.getElementById('save-info-row').classList.add('visible')
+    document.getElementById('edit-info-btn').style.display = 'none'
+    document.getElementById('acc-name').focus()
+  })
+
+  document.getElementById('cancel-info-btn').addEventListener('click', () => {
+    editingInfo = false
+    ;['acc-name','acc-phone'].forEach(id =>
+      document.getElementById(id).setAttribute('readonly', ''))
+    document.getElementById('save-info-row').classList.remove('visible')
+    document.getElementById('edit-info-btn').style.display = ''
+    renderProfile() // reset values
+  })
+
+  document.getElementById('save-info-btn').addEventListener('click', async () => {
+    const name  = document.getElementById('acc-name').value.trim()
+    const phone = document.getElementById('acc-phone').value.trim()
+
+    if (!name) { Toast.error('Nome não pode ficar em branco.'); return }
+
+    const btn = document.getElementById('save-info-btn')
+    setLoading(btn, true)
+    try {
+      await AuthService.updateProfile({ name, phone })
+      editingInfo = false
+      ;['acc-name','acc-phone'].forEach(id =>
+        document.getElementById(id).setAttribute('readonly', ''))
+      document.getElementById('save-info-row').classList.remove('visible')
+      document.getElementById('edit-info-btn').style.display = ''
+      renderProfile()
+      Toast.success('Dados atualizados!')
+    } catch {
+      Toast.error('Erro ao salvar. Tente novamente.')
+    } finally {
+      setLoading(btn, false)
+    }
+  })
+
+  // ── Toggle visualizar senha ───────────────
+  document.querySelectorAll('.eye-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target)
+      const icon  = btn.querySelector('i')
+      const hide  = input.type === 'password'
+      input.type     = hide ? 'text' : 'password'
+      icon.className = hide ? 'ph ph-eye-slash' : 'ph ph-eye'
+    })
+  })
+
+  // ── Alterar senha ─────────────────────────
+  document.getElementById('edit-pw-btn').addEventListener('click', () => {
+    document.getElementById('pw-fields').style.display = 'flex'
+    document.getElementById('pw-hint').style.display   = 'none'
+    document.getElementById('edit-pw-btn').style.display = 'none'
+    document.getElementById('pw-current').focus()
+  })
+
+  document.getElementById('cancel-pw-btn').addEventListener('click', () => {
+    document.getElementById('pw-fields').style.display = 'none'
+    document.getElementById('pw-hint').style.display   = ''
+    document.getElementById('edit-pw-btn').style.display = ''
+    ;['pw-current','pw-new','pw-confirm'].forEach(id =>
+      document.getElementById(id).value = '')
+  })
+
+  document.getElementById('save-pw-btn').addEventListener('click', async () => {
+    const current  = document.getElementById('pw-current').value
+    const newPw    = document.getElementById('pw-new').value
+    const confirm  = document.getElementById('pw-confirm').value
+
+    if (!current) { Toast.error('Informe a senha atual.'); return }
+    if (newPw.length < 6) { Toast.error('A nova senha precisa ter pelo menos 6 caracteres.'); return }
+    if (newPw !== confirm) { Toast.error('As senhas não coincidem.'); return }
+
+    const btn = document.getElementById('save-pw-btn')
+    setLoading(btn, true)
+    try {
+      await AuthService.changePassword(current, newPw)
+      document.getElementById('cancel-pw-btn').click()
+      Toast.success('Senha alterada com sucesso!')
+    } catch {
+      Toast.error('Senha atual incorreta.')
+    } finally {
+      setLoading(btn, false)
+    }
+  })
+
+  // ── Logout ────────────────────────────────
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    try { await AuthService.logout() } catch {}
+    window.location.replace('/')
+  })
+
+  // ── Pedidos ───────────────────────────────
+  async function loadOrders() {
+    const container = document.getElementById('orders-list')
+    try {
+      const all = await OrderService.getAll()
+      const mine = all.filter(o =>
+        o.customerId === session?.userId || o.customerName === session?.name)
+
+      if (!mine.length) {
+        container.innerHTML = `
+          <div class="empty-orders">
+            <i class="ph ph-shopping-bag-open"></i>
+            <p>Você ainda não fez nenhum pedido.</p>
+            <a href="/#produtos" class="btn btn-primary btn-sm">
+              <i class="ph ph-storefront"></i> Ver produtos
+            </a>
+          </div>`
+        return
+      }
+      container.innerHTML = mine.map(o => `
+        <div class="order-card">
+          <div class="order-card-top">
+            <span class="order-id">#${(o.objectId||'').slice(-8).toUpperCase()}</span>
+            <span class="order-date">${Format.date(o.createdAt||new Date())}</span>
+          </div>
+          <div class="order-items">
+            ${(o.items||[]).map(i=>`${i.name||i.productName||'Item'} × ${i.qty||i.quantity||1}`).join(' · ')||'—'}
+          </div>
+          <div class="order-footer">
+            <span class="order-total">${Format.currency(o.total||0)}</span>
+            ${Format.statusBadge(o.status)}
+          </div>
+        </div>`).join('')
+    } catch {
+      container.innerHTML = `
+        <div class="empty-orders">
+          <i class="ph ph-warning-circle"></i>
+          <p>Não foi possível carregar os pedidos.</p>
+        </div>`
+    }
+  }
+  loadOrders()
+</script>
+
+</body>
+</html>

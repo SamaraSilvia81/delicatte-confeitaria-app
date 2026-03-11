@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso Restrito · Delicatte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="/src/styles/login.css">
+  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+  <style>
+    /* Override: força dark, esconde painel visual, centraliza */
+    html, body { background: var(--void) !important; }
+
+    body {
+      display: flex !important;
+      grid-template-columns: unset !important;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .visual { display: none !important; }
+
+    .panel {
+      width: 100%;
+      max-width: 440px;
+      background: var(--void-surface);
+      border: 1px solid rgba(250,209,218,.08);
+      border-radius: 24px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+      padding: 2.5rem;
+    }
+
+    .panel-inner { max-width: 100%; }
+
+    .admin-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(134,1,32,.2);
+      border: 1px solid rgba(134,1,32,.3);
+      color: var(--blush);
+      padding: .3rem .85rem; border-radius: 999px;
+      font-size: .7rem; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-logo {
+      font-family: var(--font-display);
+      font-size: 2.2rem; font-weight: 300;
+      color: var(--cream);
+      margin-bottom: .25rem;
+    }
+    .admin-logo em { color: var(--blush); font-style: italic; }
+
+    .panel-title { color: var(--cream) !important; }
+    .panel-subtitle { color: rgba(250,209,218,.45) !important; }
+
+    .form-input {
+      background: rgba(255,255,255,.04) !important;
+      border-color: rgba(250,209,218,.12) !important;
+      color: var(--cream) !important;
+    }
+    .form-input::placeholder { color: rgba(250,209,218,.25) !important; }
+    .form-input:focus {
+      border-color: var(--crimson) !important;
+      background: rgba(255,255,255,.06) !important;
+    }
+    .form-label { color: rgba(250,209,218,.55) !important; }
+    .input-with-icon .icon { color: rgba(250,209,218,.3) !important; }
+
+    .back-link { display: none; }
+    .theme-btn-abs { display: none; }
+    .legal-note { display: none; }
+
+    .security-note {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(250,209,218,.06);
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .75rem; color: rgba(250,209,218,.25);
+    }
+  </style>
+</head>
+<body>
+
+<div class="lights" aria-hidden="true"></div>
+
+<!-- Sem painel visual — só o formulário -->
+<div class="panel">
+  <div class="panel-inner">
+
+    <div class="admin-badge">
+      <i class="ph ph-shield-check"></i>
+      Área Restrita
+    </div>
+
+    <div class="admin-logo">Deli<em>catte</em></div>
+    <p style="font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
+              color:rgba(250,209,218,.3);margin-bottom:2rem;">
+      Painel Administrativo
+    </p>
+
+    <h2 class="panel-title" style="font-size:1.4rem;margin-bottom:.3rem;">
+      Acesso de administrador
+    </h2>
+    <p class="panel-subtitle">Apenas usuários autorizados.</p>
+
+    <!-- Formulário de login admin -->
+    <form class="form-wrap" id="admin-login-form" novalidate style="margin-top:1.75rem;">
+
+      <div class="form-group">
+        <label class="form-label" for="admin-email">E-mail</label>
+        <div class="input-with-icon">
+          <i class="ph ph-envelope-simple icon"></i>
+          <input type="email" id="admin-email" class="form-input"
+                 placeholder="admin@delicatte.com" autocomplete="email">
+        </div>
+        <span class="form-error" id="admin-email-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="admin-password">Senha</label>
+        <div class="input-with-icon">
+          <i class="ph ph-lock-simple icon"></i>
+          <input type="password" id="admin-password" class="form-input"
+                 placeholder="••••••••" autocomplete="current-password">
+          <button type="button" class="eye-btn" data-target="admin-password">
+            <i class="ph ph-eye"></i>
+          </button>
+        </div>
+        <span class="form-error" id="admin-password-error"></span>
+      </div>
+
+      <div class="error-box" id="admin-err" hidden style="margin-top:.5rem;">
+        <i class="ph ph-warning-circle"></i>
+        <span id="admin-err-text"></span>
+      </div>
+
+      <button type="submit" class="btn btn-primary submit-btn" id="admin-login-btn"
+              style="margin-top:.5rem;">
+        <i class="ph ph-sign-in"></i> Entrar no painel
+      </button>
+
+    </form>
+
+    <div class="security-note">
+      <i class="ph ph-lock"></i>
+      Esta página não é indexada. Acesso monitorado.
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script type="module">
+  import { ThemeManager, Toast, Validators, validateField, validateForm, setLoading } from '/src/utils/ui.js'
+  import { AuthService, SessionService } from '/src/services/api.js'
+
+  // Força dark mode nesta página
+  document.documentElement.setAttribute('data-theme', 'dark')
+
+  // Se já está logado como admin, vai direto pro painel
+  if (SessionService.isLoggedIn() && SessionService.isAdmin()) {
+    window.location.href = '/src/admin/index.html'
+  }
+
+  // Se há sessão de cliente ativa, limpa antes de mostrar form admin
+  if (SessionService.isLoggedIn() && !SessionService.isAdmin()) {
+    SessionService.clear()
+  }
+
+  // Toggle senha
+  document.querySelectorAll('.eye-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target)
+      const icon  = btn.querySelector('i')
+      const hide  = input.type === 'password'
+      input.type     = hide ? 'text' : 'password'
+      icon.className = hide ? 'ph ph-eye-slash' : 'ph ph-eye'
+    })
+  })
+
+  // Validação blur
+  document.getElementById('admin-email')
+    ?.addEventListener('blur', function() { validateField(this, Validators.required, Validators.email) })
+  document.getElementById('admin-password')
+    ?.addEventListener('blur', function() { validateField(this, Validators.required, Validators.password) })
+
+  // Submit
+  document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    const emailI = document.getElementById('admin-email')
+    const passI  = document.getElementById('admin-password')
+    const errBox = document.getElementById('admin-err')
+    errBox.hidden = true
+
+    if (!validateForm([
+      { input: emailI, validators: [Validators.required, Validators.email] },
+      { input: passI,  validators: [Validators.required, Validators.password] },
+    ])) return
+
+    const btn = document.getElementById('admin-login-btn')
+    setLoading(btn, true)
+
+    try {
+      const user = await AuthService.login(emailI.value, passI.value)
+
+      if (user.role !== 'admin') {
+        // Faz logout e mostra erro — não é admin
+        await AuthService.logout()
+        document.getElementById('admin-err-text').textContent =
+          'Acesso negado. Esta conta não tem permissão de administrador.'
+        errBox.hidden = false
+        setLoading(btn, false)
+        return
+      }
+
+      Toast.success(`Bem-vinda, ${user.name || user.username}!`)
+      setTimeout(() => {
+        window.location.href = '/src/admin/index.html'
+      }, 600)
+
+    } catch (err) {
+      const msg = err.response?.data?.error || 'E-mail ou senha incorretos.'
+      document.getElementById('admin-err-text').textContent = msg
+      errBox.hidden = false
+      setLoading(btn, false)
+    }
+  })
+</script>
+
+</body>
+</html>

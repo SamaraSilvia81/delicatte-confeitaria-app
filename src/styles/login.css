@@ -1,0 +1,163 @@
+/* ══════════════════════════════════════════
+   login.css — Tela de autenticação
+══════════════════════════════════════════ */
+
+@import './global.css';
+
+body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+/* ── PAINEL VISUAL (esquerdo) ────────────── */
+.visual {
+  background: linear-gradient(160deg, var(--void) 0%, #1a0010 60%, var(--crimson) 120%);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 3rem;
+  min-height: 100vh;
+  align-self: stretch;
+}
+
+.visual__bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  opacity: .55;
+  mix-blend-mode: normal;
+}
+
+.visual::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(circle at 70% 20%, rgba(134,1,32,.5) 0%, transparent 55%),
+    radial-gradient(circle at 20% 80%, rgba(130,143,88,.2) 0%, transparent 40%),
+    linear-gradient(to top, rgba(6,4,12,.75) 0%, rgba(6,4,12,.1) 60%, transparent 100%);
+}
+
+.visual__pattern {
+  position: absolute; inset: 0; opacity: .015; z-index: 2;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--blush) 0, var(--blush) 1px,
+    transparent 0, transparent 50%
+  );
+  background-size: 30px 30px;
+}
+
+.visual__content { position: relative; z-index: 3; }
+
+.visual__logo {
+  font-family: var(--font-display);
+  font-size: 3rem; font-weight: 300; color: var(--cream);
+}
+.visual__logo em { color: var(--blush); font-style: italic; }
+
+.visual__sub {
+  font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(250,209,218,.45); margin: .25rem 0 2rem;
+}
+
+.visual__quote {
+  font-family: var(--font-display);
+  font-size: 1.5rem; font-weight: 300; font-style: italic;
+  color: rgba(255,251,239,.7); line-height: 1.5;
+  border-left: 2px solid rgba(250,209,218,.4);
+  padding-left: 1.25rem;
+}
+
+/* ── PAINEL FORMULÁRIO (direito) ─────────── */
+.panel {
+  display: flex; flex-direction: column;
+  justify-content: center; padding: 3rem;
+  background: var(--bg); overflow-y: auto;
+}
+.panel-inner { max-width: 400px; width: 100%; margin: 0 auto; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: .4rem;
+  margin-bottom: 2rem;
+  font-size: .85rem; color: var(--text-muted);
+  transition: color var(--t);
+}
+.back-link:hover { color: var(--crimson); }
+
+.theme-btn-abs {
+  position: absolute; top: 1.25rem; right: 1.25rem;
+}
+
+.panel-title    { margin-bottom: .35rem; }
+.panel-subtitle { font-size: .9rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+
+/* ── TABS ────────────────────────────────── */
+.tabs {
+  display: flex; gap: 0;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 3px; margin-bottom: 2rem;
+}
+.tab {
+  flex: 1; padding: .55rem;
+  border-radius: calc(var(--radius-md) - 3px);
+  font-size: .85rem; font-weight: 500;
+  color: var(--text-muted);
+  transition: all var(--t); text-align: center;
+}
+.tab.active { background: var(--crimson); color: #fff; }
+
+/* ── FORMULÁRIO ──────────────────────────── */
+.form-wrap { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.input-with-icon { position: relative; }
+.input-with-icon .icon {
+  position: absolute; left: .9rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted); pointer-events: none;
+}
+.input-with-icon .form-input { padding-left: 2.5rem; }
+
+.eye-btn {
+  position: absolute; right: .75rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted); padding: .25rem;
+  transition: color var(--t);
+}
+.eye-btn:hover { color: var(--text-1); }
+
+.forgot-link {
+  float: right;
+  color: var(--crimson); font-size: .8rem;
+  transition: opacity var(--t);
+}
+.forgot-link:hover { opacity: .75; }
+
+.error-box {
+  background: rgba(192,57,43,.08);
+  border: 1px solid rgba(192,57,43,.2);
+  border-radius: var(--radius-md);
+  padding: .75rem 1rem;
+  font-size: .85rem; color: #c0392b;
+  display: flex; gap: .5rem; align-items: flex-start;
+}
+.error-box[hidden] { display: none !important; }
+.error-box i { flex-shrink: 0; margin-top: .1rem; }
+
+.submit-btn {
+  width: 100%; justify-content: center; padding: .85rem;
+}
+
+.legal-note {
+  text-align: center; margin-top: 1.5rem;
+  font-size: .82rem; color: var(--text-muted);
+}
+.legal-note a { color: var(--crimson); font-weight: 500; }
+
+/* ── RESPONSIVE ──────────────────────────── */
+@media (max-width: 768px) {
+  body    { grid-template-columns: 1fr; }
+  .visual { display: none; }
+  .panel  { padding: 2rem 1.5rem; }
+}
