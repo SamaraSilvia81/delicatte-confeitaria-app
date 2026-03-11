@@ -130,7 +130,7 @@ A pergunta central foi:
 
 ### Personas
 
-#### 👩‍🍳 Samara — A Proprietária (Administradora)
+#### 👩‍🍳 Hailey — A Proprietária (Administradora)
 
 | | |
 |---|---|
