@@ -177,7 +177,7 @@ Finaliza o pedido → Recebe confirmação → Pedido registrado no perfil
 Acessa "Meus pedidos" → Acompanha o status → Repete o pedido facilmente
 ```
 
-#### Jornada da Administradora (Samara)
+#### Jornada da Administradora (Hailey)
 
 ```
 [Gestão diária]
