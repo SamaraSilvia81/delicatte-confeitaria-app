@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Acesso Restrito · Delicatte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/src/styles/login.css">
+  <script type="module" src="../src/login-main.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
   <style>
     /* Override: força dark, esconde painel visual, centraliza */
@@ -155,15 +155,15 @@
 <div id="toast-container"></div>
 
 <script type="module">
-  import { ThemeManager, Toast, Validators, validateField, validateForm, setLoading } from '/src/utils/ui.js'
-  import { AuthService, SessionService } from '/src/services/api.js'
+  import { ThemeManager, Toast, Validators, validateField, validateForm, setLoading } from '../src/utils/ui.js'
+  import { AuthService, SessionService } from '../src/services/api.js'
 
   // Força dark mode nesta página
   document.documentElement.setAttribute('data-theme', 'dark')
 
   // Se já está logado como admin, vai direto pro painel
   if (SessionService.isLoggedIn() && SessionService.isAdmin()) {
-    window.location.href = '/src/admin/index.html'
+    window.location.href = '/delicatte-confeitaria-app/src/admin/index.html'
   }
 
   // Se há sessão de cliente ativa, limpa antes de mostrar form admin
@@ -220,7 +220,7 @@
 
       Toast.success(`Bem-vinda, ${user.name || user.username}!`)
       setTimeout(() => {
-        window.location.href = '/src/admin/index.html'
+        window.location.href = '/delicatte-confeitaria-app/src/admin/index.html'
       }, 600)
 
     } catch (err) {

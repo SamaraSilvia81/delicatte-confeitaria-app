@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin · Delicatte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/delicatte-confeitaria-app/src/styles/admin.css">
+  <script type="module" src="../admin-main.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 </head>
 <body>
@@ -314,9 +314,9 @@
      JAVASCRIPT
 ══════════════════════════════════════════ -->
 <script type="module">
-  import { ThemeManager, Toast, Format, SkeletonFactory, Validators, validateForm, setLoading } from '/src/utils/ui.js'
-  import { AdminProductRow } from '/src/components/ProductCard.js'
-  import { AuthService, SessionService, ProductService, OrderService } from '/src/services/api.js'
+  import { ThemeManager, Toast, Format, SkeletonFactory, Validators, validateForm, setLoading } from '../utils/ui.js'
+  import { AdminProductRow } from '../components/ProductCard.js'
+  import { AuthService, SessionService, ProductService, OrderService } from '../services/api.js'
 
   ThemeManager.init()
   ThemeManager.bind('#theme-toggle, #theme-toggle-2')

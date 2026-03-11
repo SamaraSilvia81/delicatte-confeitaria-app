@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Entrar · Delicatte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/delicatte-confeitaria-app/src/styles/login.css">
+  <script type="module" src="../login-main.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 </head>
 <body>
@@ -16,7 +16,7 @@
      PAINEL VISUAL (esquerdo)
 ══════════════════════════════════════════ -->
 <div class="visual" aria-hidden="true">
-  <img class="visual__bg-img" src="/src/assets/img/hero.jpg" alt="" draggable="false">
+  <img class="visual__bg-img" src="../../src/assets/img/hero.jpg" alt="" draggable="false">
   <div class="visual__pattern"></div>
   <div class="visual__content">
     <div class="visual__logo">Deli<em>catte</em></div>
@@ -153,8 +153,8 @@
      JAVASCRIPT
 ══════════════════════════════════════════ -->
 <script type="module">
-  import { ThemeManager, Toast, Validators, validateField, validateForm, setLoading } from '/src/utils/ui.js'
-  import { AuthService, SessionService } from '/src/services/api.js'
+  import { ThemeManager, Toast, Validators, validateField, validateForm, setLoading } from '../utils/ui.js'
+  import { AuthService, SessionService } from '../services/api.js'
 
   ThemeManager.init()
   ThemeManager.bind('#theme-toggle')
@@ -162,7 +162,7 @@
   // Redireciona se já logado
   if (SessionService.isLoggedIn()) {
     const s = SessionService.get()
-    window.location.href = s.role === 'admin' ? '/src/admin/index.html' : '/src/pages/profile.html'
+    window.location.href = s.role === 'admin' ? '/delicatte-confeitaria-app/src/admin/index.html' : '/delicatte-confeitaria-app/src/pages/profile.html'
   }
 
   // ── Tabs ───────────────────────────────────
@@ -219,7 +219,7 @@
       const user = await AuthService.login(emailI.value, passI.value)
       Toast.success(`Bem-vinda, ${user.name || user.username}!`)
       setTimeout(() => {
-        window.location.href = user.role === 'admin' ? '/src/admin/index.html' : '/src/pages/profile.html'
+        window.location.href = user.role === 'admin' ? '/delicatte-confeitaria-app/src/admin/index.html' : '/delicatte-confeitaria-app/src/pages/profile.html'
       }, 800)
     } catch (err) {
       const msg = err.response?.data?.error || 'E-mail ou senha incorretos.'

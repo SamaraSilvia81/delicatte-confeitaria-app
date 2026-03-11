@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minha conta · Delicatte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/delicatte-confeitaria-app/src/styles/index.css">
+  <script type="module" src="../main.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
   <style>
     body { min-height: 100vh; background: var(--bg); }
@@ -343,14 +343,14 @@
 <div id="toast-container"></div>
 
 <script type="module">
-  import { ThemeManager, Toast, Format, setLoading } from '/src/utils/ui.js'
-  import { AuthService, SessionService, OrderService } from '/src/services/api.js'
+  import { ThemeManager, Toast, Format, setLoading } from '../utils/ui.js'
+  import { AuthService, SessionService, OrderService } from '../services/api.js'
 
   ThemeManager.init()
   ThemeManager.bind('#theme-toggle')
 
   if (!SessionService.isLoggedIn()) {
-    window.location.replace('/src/pages/login.html')
+    window.location.replace('/delicatte-confeitaria-app/src/pages/login.html')
   }
 
   let session = SessionService.get()
@@ -508,7 +508,7 @@
   // ── Logout ────────────────────────────────
   document.getElementById('logout-btn').addEventListener('click', async () => {
     try { await AuthService.logout() } catch {}
-    window.location.replace('/')
+    window.location.replace('/delicatte-confeitaria-app/')
   })
 
   // ── Pedidos ───────────────────────────────

@@ -6,7 +6,7 @@
   <meta name="description" content="Delicatte Confeitaria — Doces artesanais feitos com amor">
   <title>Delicatte Confeitaria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/delicatte-confeitaria-app/src/styles/index.css">
+  <script type="module" src="./src/main.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
 </head>
 <body>
@@ -34,7 +34,7 @@
 <header id="navbar" role="banner">
   <div class="navbar-inner">
 
-    <a href="/" class="nav-logo">Deli<em>catte</em></a>
+    <a href="/delicatte-confeitaria-app/" class="nav-logo">Deli<em>catte</em></a>
 
     <ul class="nav-links" role="list">
       <li><a href="#produtos">Produtos</a></li>
@@ -94,9 +94,8 @@
     <div class="hero-visual">
       <div class="hero-placeholder">
         <img class="hero-image"
-          src="/src/assets/img/hero.jpg"
+          src="/delicatte-confeitaria-app/src/assets/img/hero.jpg"
           alt="Bolo artesanal Delicatte">
-      </div>
 
       <div class="hero-float tl">
         <div class="float-icon" style="background:rgba(134,1,32,.1); color:var(--crimson);">
@@ -157,7 +156,7 @@
 
       <div class="about-visual">
         <img class="hero-image"
-          src="/src/assets/img/about.jpg"
+          src="/delicatte-confeitaria-app/src/assets/img/about.jpg"
           alt="Bolo artesanal Delicatte">
       </div>
       <div class="about-text">
@@ -610,10 +609,10 @@
      JAVASCRIPT
 ══════════════════════════════════════════ -->
 <script type="module">
-  import { ThemeManager, Toast, Format, SkeletonFactory, renderEmptyState, setLoading } from '/src/utils/ui.js'
-  import { ProductCard } from '/src/components/ProductCard.js'
-  import { CartService } from '/src/hooks/cart.js'
-  import { ProductService, OrderService, SessionService } from '/src/services/api.js'
+  import { ThemeManager, Toast, Format, SkeletonFactory, renderEmptyState, setLoading } from './src/utils/ui.js'
+  import { ProductCard } from './src/components/ProductCard.js'
+  import { CartService } from './src/hooks/cart.js'
+  import { ProductService, OrderService, SessionService } from './src/services/api.js'
 
   ThemeManager.init()
   ThemeManager.bind('#theme-toggle')
