@@ -2,16 +2,17 @@
 // ─────────────────────────────────────────────
 // PADRÃO: Singleton de configuração
 // Todas as credenciais e constantes em um lugar.
-// Em produção: usar variáveis de ambiente (.env)
+// Credenciais: lidas das variáveis de ambiente (.env)
 // ─────────────────────────────────────────────
 
 export const CONFIG = {
   // Back4App — App: delicatte-app
+  // As credenciais vêm do arquivo .env (veja .env.example).
+  // Nunca escreva chaves direto neste arquivo.
   BACK4APP: {
-    BASE_URL:   'https://parseapi.back4app.com',
-    APP_ID:     'gIzxO3tBSpMQ5yf8vEc16I4fRjeutu3a8mIuKdse',
-    JS_KEY:     'AU5VUjzMDF86hEwqotbU4fK05BGUvRZwxRougn3G',
-    REST_KEY:   'nUaXboH7fQKOi4p9N409P2xALHLWeJbXedaiUUV6',
+    BASE_URL: 'https://parseapi.back4app.com',
+    APP_ID:   import.meta.env.VITE_BACK4APP_APP_ID,
+    JS_KEY:   import.meta.env.VITE_BACK4APP_JS_KEY,
   },
 
   // Chaves de localStorage
