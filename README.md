@@ -9,7 +9,7 @@
 
 </div>
 
-Loja virtual de uma confeitaria artesanal, com vitrine de produtos, carrinho e tema claro/escuro.
+Loja virtual de uma confeitaria artesanal: vitrine de produtos, carrinho, cadastro e login de clientes, perfil com histórico de pedidos e painel administrativo.
 
 Esta é a **versão React** do projeto. Ela nasceu da migração da [versão em HTML, CSS e JavaScript puro](https://github.com/SamaraSilvia81/delicatte-app-demo), que continua disponível como referência. O objetivo é mostrar, lado a lado, como cada conceito do JavaScript puro vira um conceito do React.
 
@@ -22,113 +22,69 @@ Esta é a **versão React** do projeto. Ela nasceu da migração da [versão em 
 | Repositório | Stack | O que tem |
 |---|---|---|
 | [menu-delicatte](https://github.com/SamaraSilvia81/menu-delicatte) | HTML e CSS | Cardápio digital para uso via QR code |
-| [delicatte-app-demo](https://github.com/SamaraSilvia81/delicatte-app-demo) | HTML, CSS e JavaScript (Vite) | Loja completa: vitrine, login, perfil e painel administrativo |
-| **delicatte-confeitaria-app** (este) | React | Migração da vitrine e do carrinho para React |
+| [delicatte-app-demo](https://github.com/SamaraSilvia81/delicatte-app-demo) | HTML, CSS e JavaScript (Vite) | Loja completa, incluindo checkout |
+| **delicatte-confeitaria-app** (este) | React | Migração da loja para React |
+
+## O que já funciona
+
+| Funcionalidade | Status |
+|---|---|
+| Vitrine com filtro por categoria | Pronto |
+| Carrinho em painel lateral | Pronto |
+| Tema claro e escuro | Pronto |
+| Cadastro e login de clientes | Pronto |
+| Perfil: dados, troca de senha e histórico de pedidos | Pronto |
+| Painel admin: produtos (CRUD), pedidos e métricas | Pronto |
+| Finalizar pedido (checkout) | Ainda não. O botão mostra um aviso; na versão em JavaScript puro ele já funciona |
 
 ---
 
 ## Como rodar
 
-**Pré-requisitos:** Node.js 18 ou superior e um app no [Back4App](https://back4app.com) com a classe `Product`.
+**Pré-requisitos:** Node.js 18 ou superior e um app no [Back4App](https://back4app.com).
 
 ```bash
-# 1. Instalar dependências
-npm install
-
-# 2. Configurar as credenciais
-cp .env.example .env
-#    abra o .env e preencha com as chaves do seu app no Back4App
-
-# 3. Iniciar
-npm run dev
+yarn                  # instala as dependências
+cp .env.example .env  # depois preencha com as chaves do seu app no Back4App
+yarn dev
 ```
 
 Acesse `http://localhost:5173`.
 
-Para popular o banco com os 15 produtos de exemplo, use o script `npm run seed` do [delicatte-app-demo](https://github.com/SamaraSilvia81/delicatte-app-demo#-como-rodar). Os dois projetos usam o mesmo app no Back4App.
-
-### Variáveis de ambiente
-
 | Variável | Onde encontrar |
 |---|---|
 | `VITE_BACK4APP_APP_ID` | Back4App → App Settings → Security & Keys → Application ID |
-| `VITE_BACK4APP_JS_KEY` | Back4App → App Settings → Security & Keys → JavaScript Key |
+| `VITE_BACK4APP_JS_KEY` | Back4App → App Settings → Security & Keys → JavaScript key |
 
-O arquivo `.env` está no `.gitignore` e nunca deve ser commitado.
+O `.env` está no `.gitignore` e nunca deve ser commitado. Para criar as classes, popular o banco e configurar as permissões, siga [Configurando o Back4App](docs/configurando-o-back4app.md).
 
-> **Sobre segurança:** a JavaScript Key vai para o código que roda no navegador, então qualquer pessoa pode vê-la. Isso é esperado no Parse. O que protege os dados são as **Class Level Permissions** (CLP) de cada classe no Back4App: a vitrine só precisa de leitura pública em `Product`. A **REST Key** e a **Master Key** nunca devem aparecer no frontend.
-
----
-
-## Estrutura de pastas
-
-```
-src/
-│
-├── main.jsx                ← Ponto de entrada. Monta o React no DOM.
-├── App.jsx                 ← Componente raiz. Organiza Providers + layout.
-│
-├── assets/img/             ← Imagens importadas como módulos JS
-│
-├── context/                ← Estado global (substitui Observer Pattern do JS puro)
-│   ├── CartContext.jsx     ← Carrinho acessível em qualquer componente
-│   └── ThemeContext.jsx    ← Tema dark/light global
-│
-├── hooks/                  ← Lógica reutilizável encapsulada
-│   ├── useProducts.js      ← Busca produtos na API (substitui loadProducts())
-│   └── useToast.js         ← Sistema de notificações
-│
-├── services/               ← Comunicação com backend (igual à versão HTML)
-│   ├── config.js           ← Credenciais e constantes
-│   └── api.js              ← Axios + ProductService, SessionService
-│
-├── components/             ← Blocos visuais reutilizáveis
-│   ├── Navbar.jsx
-│   ├── Banner.jsx
-│   ├── Hero.jsx
-│   ├── ProductCard.jsx     ← Recebe um produto via props
-│   ├── ProductsSection.jsx ← Filtros + lista de cards
-│   ├── AboutSection.jsx
-│   ├── CartDrawer.jsx      ← Painel lateral do carrinho
-│   ├── Footer.jsx
-│   └── Toast.jsx
-│
-├── pages/                  ← Uma "tela" = composição de componentes
-│   └── Home.jsx
-│
-└── styles/
-    ├── global.css          ← Design tokens, tipografia, botões
-    ├── index.css           ← Estilos da landing page
-    └── cart.css            ← Drawer, cards, skeleton, toast
-```
-
----
-
----
-
-## HTML puro → React: comparativo
-
-| Conceito HTML puro | Equivalente React |
+| Rota | Tela |
 |---|---|
-| `innerHTML` / `createElement` | JSX (componentes) |
-| `querySelector` + `classList` | `useState` + re-render |
-| `addEventListener('click', fn)` | `onClick={fn}` |
-| Observer Pattern (cart.js) | Context API + useReducer |
-| ThemeManager singleton | ThemeContext + useEffect |
-| `loadProducts()` + DOM | hook `useProducts()` |
-| `display: none` para esconder | `{condition && <Component />}` |
-| `forEach` + `innerHTML` | `.map()` em JSX |
+| `/` | Loja |
+| `/#/login` | Login e cadastro |
+| `/#/profile` | Perfil do cliente |
+| `/#/admin` | Painel administrativo (exige usuário com `role` igual a `admin`) |
 
 ---
+
+## Documentação
+
+| Se você quer... | Leia |
+|---|---|
+| Entender como o código está organizado | [Arquitetura](docs/arquitetura.md) |
+| Ver cada chamada feita ao Back4App | [Referência da API](docs/api-back4app.md) |
+| Conhecer as classes e os campos do banco | [Modelo de dados](docs/modelo-de-dados.md) |
+| Configurar chaves, dados e permissões | [Configurando o Back4App](docs/configurando-o-back4app.md) |
+| Comparar a versão em JavaScript puro com a React | [Migração JS → React](docs/migracao-js-para-react.md) |
+| Saber o que ainda tem problema | [Problemas conhecidos](docs/problemas-conhecidos.md) |
 
 ---
 
 ## Próximos passos
 
-- [ ] `react-router-dom` para navegação entre páginas
-- [ ] Página de login e perfil, portando as da versão em JavaScript puro
-- [ ] Checkout como componente React
-- [ ] Painel administrativo
+- [ ] Checkout com `OrderService.create`, como na versão em JavaScript puro
+- [ ] Trocar o roteamento por hash por `react-router-dom`
+- [ ] Resolver os itens de [Problemas conhecidos](docs/problemas-conhecidos.md)
 
 ---
 
